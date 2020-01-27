@@ -1,7 +1,5 @@
 #include "window_manager.hpp"
 
-
-
 int WindowManager::initialize(int width, int height) {
   // Initialise GLFW
   
