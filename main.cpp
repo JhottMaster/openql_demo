@@ -10,11 +10,12 @@ bool windowShouldStayOpen() {
 }
  
 int main() {
-  glewExperimental = true; // Needed for core profile
-  window_manager.initialize(1000, 768);
+
+  
+  window_manager.initialize("Open GL Demo", 1000, 768);
   
   while(windowShouldStayOpen()) {
-      glClear( GL_COLOR_BUFFER_BIT );
+      window_manager.clearCurrentBuffer();
 
       // Draw 
 

@@ -1,12 +1,14 @@
 #include "window_manager.hpp"
 
-int WindowManager::initialize(int width, int height) {
-  // Initialise GLFW
-  
-  if( !glfwInit() )
-  {
-      fprintf( stderr, "Failed to initialize GLFW\n" );
-      return -1;
+int WindowManager::initialize(const char* windowName, int width, int height) {
+  // Setting this boolean is necessary to force GLEW to use a modern 
+  // OpenGL method for checking if a function is available- it's also
+  // required by the core profile (see `glfwWindowHint` below)
+  glewExperimental = true; 
+
+  if(!glfwInit()) {
+    fprintf( stderr, "Failed to initialize GLFW\n" );
+    return -1;
   }
   
   glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
@@ -16,11 +18,11 @@ int WindowManager::initialize(int width, int height) {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
 
   // Open a window and create its OpenGL context
-  window = glfwCreateWindow( width, height, "Test Window", NULL, NULL);
+  window = glfwCreateWindow( width, height, windowName, NULL, NULL);
   if( window == NULL ){
-      fprintf( stderr, "Failed to open GLFW window.\n" );
-      glfwTerminate();
-      return -1;
+    fprintf( stderr, "Failed to open GLFW window.\n" );
+    glfwTerminate();
+    return -1;
   }
   glfwMakeContextCurrent(window); // Initialize GLEW
   glewExperimental=true; // Needed in core profile
@@ -46,7 +48,11 @@ bool WindowManager::windowShouldClose() {
   return (glfwWindowShouldClose(window) != 0);
 }
 
-bool WindowManager::swapBuffersAndCheckForEvents() {
+void WindowManager::swapBuffersAndCheckForEvents() {
   glfwSwapBuffers(window);
   glfwPollEvents();
+}
+
+void WindowManager::clearCurrentBuffer() {
+  glClear( GL_COLOR_BUFFER_BIT );
 }

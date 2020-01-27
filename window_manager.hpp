@@ -18,11 +18,12 @@ class WindowManager {
     
   public:
     GLFWwindow* window; 
-    int initialize(int width, int height);
+    int initialize(const char* windowName, int width, int height);
     bool windowShouldClose();
     bool windowEspaceKeyHit();
     bool windowKeyHit(int glfwKey);
-    bool swapBuffersAndCheckForEvents();
+    void swapBuffersAndCheckForEvents();
+    void clearCurrentBuffer();
 };
 
 #endif 
