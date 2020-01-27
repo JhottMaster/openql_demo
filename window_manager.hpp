@@ -22,7 +22,7 @@ class WindowManager {
     bool windowShouldClose();
     bool windowEspaceKeyHit();
     bool windowKeyHit(int glfwKey);
-    bool swapBuffersAndCheckForEvents();
+    void swapBuffersAndCheckForEvents();
 };
 
 #endif 

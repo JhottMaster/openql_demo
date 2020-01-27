@@ -46,7 +46,7 @@ bool WindowManager::windowShouldClose() {
   return (glfwWindowShouldClose(window) != 0);
 }
 
-bool WindowManager::swapBuffersAndCheckForEvents() {
+void WindowManager::swapBuffersAndCheckForEvents() {
   glfwSwapBuffers(window);
   glfwPollEvents();
 }
