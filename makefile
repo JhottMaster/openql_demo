@@ -1,4 +1,4 @@
-all: open_gl_demo
+unix: open_gl_demo
 	./build/open_gl_demo
 
 osx: open_gl_demo_os_x
