@@ -14,6 +14,7 @@ open_gl_demo.o: main.cpp
 	 g++ -c -o build/main.o main.cpp
 	 g++ -c -o build/window_manager.o window_manager.hpp
 	 g++ -c -o build/file_utils.o file_utils.hpp
+	 g++ -c -o build/shader_utils.o shader_utils.hpp
      
 clean:
 	 rm build/*
