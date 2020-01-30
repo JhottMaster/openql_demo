@@ -1,5 +1,6 @@
 #include "window_manager.hpp"
 #include "file_utils.hpp"
+#include "shader_util.hpp"
 
 using namespace glm;
 
@@ -28,41 +29,12 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjectHandle);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  // Lets create a vertex shader object on the device to store shader program:
-  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  std::string contents = FileUtils::ReadString("shaders/2d_triangle.vert");
-  char const * pointer = contents.c_str();
-  glShaderSource(vertexShader, 1, &pointer, NULL);
+  GLuint vertexShader = ShaderUtil::LoadShader(GL_VERTEX_SHADER, "2d_triangle");
+  if (!ShaderUtil::TryCompileShader(vertexShader)) return 0;
   
-  // Now let's compile it...
-  glCompileShader(vertexShader);
-  GLint status; // This will store compilation output result
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status); // Check result
-  if (status != GL_TRUE) { 
-    printf("Could not compile vertex shader! Callstack: \n"); 
-    char buffer[512];
-    glGetShaderInfoLog(vertexShader, 512, NULL, buffer);
-    printf("%s\n\nQuitting..", buffer);
-    return 0; 
-  }
+  GLuint fragmentShader = ShaderUtil::LoadShader(GL_FRAGMENT_SHADER, "2d_triangle");
+  if (!ShaderUtil::TryCompileShader(fragmentShader)) return 0;
 
-  // Now create fragment shader object on the device:
-  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  std::string contents2 = FileUtils::ReadString("shaders/2d_triangle.frag");
-  char const * pointer2 = contents2.c_str();
-  glShaderSource(fragmentShader, 1, &pointer2, NULL);
-  
-  // Now let's compile it...
-  glCompileShader(fragmentShader);
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status); // Check result
-  if (status != GL_TRUE) { 
-    printf("Could not compile fragment shader! Callstack: \n"); 
-    char buffer[512];
-    glGetShaderInfoLog(fragmentShader, 512, NULL, buffer);
-    printf("%s\n\nQuitting..", buffer);
-    return 0; 
-  }
-  
   // Now we'll need a complete program "pipeline"
   GLuint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
@@ -77,6 +49,7 @@ int main() {
 
   // Get the position of the "postition" argument in vertex shader:
   GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+  
   // Describe the input type for posAttrib (vertices array)
   glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableVertexAttribArray(posAttrib);
