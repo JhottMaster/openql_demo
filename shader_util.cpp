@@ -13,7 +13,7 @@ GLuint ShaderUtil::LoadShader(int shader_type, const char * shader_name) {
   std::string contents = FileUtils::ReadString(path.c_str());
 
 	// Define shader:
-  char const * pointer = contents.c_str();
+  const char * pointer = contents.c_str();
   glShaderSource(shader, 1, &pointer, NULL);
 
 	return shader;
