@@ -1,7 +1,6 @@
 #include "window_manager.hpp"
 #include "file_utils.hpp"
 #include "shader_util.hpp"
-#include "chrono"
 
 using namespace glm;
 
@@ -17,9 +16,9 @@ int main() {
   window.initialize("Open GL Demo", 1000, 768);
 
   float vertices[] = {
-      0.0f,  0.5f, // Vertex 1 (X, Y)
-      0.5f, -0.5f, // Vertex 2 (X, Y)
-      -0.5f, -0.5f  // Vertex 3 (X, Y)
+    0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
+    0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
+    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
   };
 
   // Create device object to store vertex data in graphics card memory:
@@ -46,9 +45,6 @@ int main() {
   glLinkProgram(shaderProgram); // Link it
   glUseProgram(shaderProgram); // Use it
 
-  // Get a reference to our global triangle color variable used in our fragment shader:
-  GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
-
   GLuint vertexArrayObjectHandle;
   glGenVertexArrays(1, &vertexArrayObjectHandle);
   glBindVertexArray(vertexArrayObjectHandle);  
@@ -56,11 +52,14 @@ int main() {
   // Get the position of the "postition" argument in vertex shader:
   GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
   // Describe the input type for posAttrib (vertices array)
-  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
   glEnableVertexAttribArray(posAttrib);
 
-  glUniform3f(uniColor, 1.0f, 0.0f, 0.0f);
-  auto t_start = std::chrono::high_resolution_clock::now();
+  // Get the position of the "color" argument in vertex shader:
+  GLint colorAttrib = glGetAttribLocation(shaderProgram, "color");
+  // Describe the input type for colorAttrib (color position in vertices array)
+  glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
+  glEnableVertexAttribArray(colorAttrib);
 
   while(windowShouldStayOpen()) {
       
@@ -68,11 +67,6 @@ int main() {
 
       // Draw
       glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
-
-      auto t_now = std::chrono::high_resolution_clock::now();
-      float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
-
-      glUniform3f(uniColor, (sin(time * 4.0f) + 1.0f) / 2.0f, 0.0f, 0.0f);
 
       window.swapBuffersAndCheckForEvents();
   } // Check if the ESC key was pressed or the window was closed
