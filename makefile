@@ -1,20 +1,28 @@
-unix: open_gl_demo
-	./build/open_gl_demo
+# Cross-platform compilation:
+CC=g++
+BASE_LINKED_LIBRARIES=-lGLEW -lglfw 
+OSX_LINKED_LIBRARIES=-framework OpenGL
+UNIX_LINKED_LIBRARIES=-lGL
 
-osx: open_gl_demo_os_x
-	./build/open_gl_demo
+# Build configuration:
+EXECUTABLE_NAME=open_gl_demo
+BUILD_DIRECTORY=build/bin/
+OUTPUT_DIRECTORY=build/
 
-open_gl_demo_os_x: main.cpp
-	g++ -o build/open_gl_demo *.cpp -lGLEW -lglfw -framework OpenGL
 
-open_gl_demo:  main.cpp
-	 g++ -o build/open_gl_demo *.*pp -lGLEW -lglfw -lGL
+unix: build_unix
+	./$(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME)
 
-open_gl_demo.o: main.cpp
-	 g++ -c -o build/main.o main.cpp
-	 g++ -c -o build/window_manager.o window_manager.hpp
-	 g++ -c -o build/file_utils.o file_utils.hpp
-	 g++ -c -o build/shader_utils.o shader_utils.hpp
-     
+osx: build_osx
+	./$(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME)
+
+build_osx: main.cpp
+	@mkdir -p $(OUTPUT_DIRECTORY)
+	$(CC) -o $(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME) *.cpp $(BASE_LINKED_LIBRARIES)$(OSX_LINKED_LIBRARIES)
+
+build_unix: main.cpp
+	@mkdir -p $(OUTPUT_DIRECTORY)
+	$(CC) -o $(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME) *.*pp $(BASE_LINKED_LIBRARIES)$(UNIX_LINKED_LIBRARIES)
+
 clean:
-	 rm build/*
+	rm $(OUTPUT_DIRECTORY)*

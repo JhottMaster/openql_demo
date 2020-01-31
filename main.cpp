@@ -1,6 +1,7 @@
 #include "window_manager.hpp"
 #include "file_utils.hpp"
 #include "shader_util.hpp"
+#include "chrono"
 
 using namespace glm;
 
@@ -39,9 +40,14 @@ int main() {
   GLuint shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, vertexShader);
   glAttachShader(shaderProgram, fragmentShader);
+  // Fragment shader is allowed to write to multiple buffers, so explicitly specify
+  // which output is written to which buffer (0) before linking the program:
   glBindFragDataLocation(shaderProgram, 0, "outColor");
   glLinkProgram(shaderProgram); // Link it
   glUseProgram(shaderProgram); // Use it
+
+  // Get a reference to our global triangle color variable used in our fragment shader:
+  GLint uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
 
   GLuint vertexArrayObjectHandle;
   glGenVertexArrays(1, &vertexArrayObjectHandle);
@@ -49,16 +55,24 @@ int main() {
 
   // Get the position of the "postition" argument in vertex shader:
   GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-  
   // Describe the input type for posAttrib (vertices array)
   glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableVertexAttribArray(posAttrib);
-    
+
+  glUniform3f(uniColor, 1.0f, 0.0f, 0.0f);
+  auto t_start = std::chrono::high_resolution_clock::now();
+
   while(windowShouldStayOpen()) {
+      
       window.clearCurrentBuffer();
 
       // Draw
       glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+
+      auto t_now = std::chrono::high_resolution_clock::now();
+      float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+
+      glUniform3f(uniColor, (sin(time * 4.0f) + 1.0f) / 2.0f, 0.0f, 0.0f);
 
       window.swapBuffersAndCheckForEvents();
   } // Check if the ESC key was pressed or the window was closed

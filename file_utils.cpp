@@ -13,7 +13,3 @@ std::string FileUtils::ReadString(const char * file_path) {
 	}
 	return contents;
 }
-
-char const * FileUtils::ReadStringToPointer(const char * file_path) {
-	return FileUtils::ReadString(file_path).c_str();
-}
