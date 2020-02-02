@@ -18,6 +18,14 @@ sudo apt-get install libglm-dev
 
 When linking, you can use the gcc `-l[LIBRARY_NAME]` to link the libraries. For example, `-lGL` for OpenGL.
 
+Also, you'll need to download SOIL: https://www.lonesock.net/soil.html  - extract that somewhere and go to `~/project/makefile` directory, and the run:
+```
+mkdir obj
+sudo make install
+```
+
+This will install SOIL in Unix to allow linking. You can't use the library file that comes in `/lib` because it is 32-bit (unless you have a 32-bit machine)
+
 ### Building
 
 Build & run with `make unix`
