@@ -1,6 +1,7 @@
 #include "window_manager.hpp"
 #include "file_utils.hpp"
 #include "shader_util.hpp"
+#include "SOIL.h"
 
 using namespace glm;
 
@@ -16,9 +17,11 @@ int main() {
   window.initialize("Open GL Demo", 1000, 768);
 
   float vertices[] = {
-    0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
-    0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
-    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
+  // Position         Color                 Texcoords
+    -0.5f,  0.5f,     1.0f, 0.0f, 0.0f,     0.0f, 0.0f, // Top-left
+     0.5f,  0.5f,     0.0f, 1.0f, 0.0f,     1.0f, 0.0f, // Top-right
+     0.5f, -0.5f,     0.0f, 0.0f, 1.0f,     1.0f, 1.0f, // Bottom-right
+    -0.5f, -0.5f,     1.0f, 1.0f, 1.0f,     0.0f, 1.0f  // Bottom-left
   };
 
   // Create device object to store vertex data in graphics card memory:
@@ -29,47 +32,65 @@ int main() {
   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjectHandle);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  GLuint vertexShader = ShaderUtil::LoadShader(GL_VERTEX_SHADER, "2d_triangle");
-  if (!ShaderUtil::TryCompileShader(vertexShader)) return 0;
+  // Create an element array
+  GLuint elementBufferObjectHandle;
+  glGenBuffers(1, &elementBufferObjectHandle);
+
+  GLuint elementIndexTriangles[] = {
+      0, 1, 2,
+      2, 3, 0
+  };
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObjectHandle);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elementIndexTriangles), elementIndexTriangles, GL_STATIC_DRAW);
+
+  // Build, compile, and link our vertex and fragment shares into a program:
+  GLuint defaultShaderProgram = ShaderUtil::BuildDefaultShaderProgram();
+  glUseProgram(defaultShaderProgram); // Use shader program
   
-  GLuint fragmentShader = ShaderUtil::LoadShader(GL_FRAGMENT_SHADER, "2d_triangle");
-  if (!ShaderUtil::TryCompileShader(fragmentShader)) return 0;
-
-  // Now we'll need a complete program "pipeline"
-  GLuint shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  // Fragment shader is allowed to write to multiple buffers, so explicitly specify
-  // which output is written to which buffer (0) before linking the program:
-  glBindFragDataLocation(shaderProgram, 0, "outColor");
-  glLinkProgram(shaderProgram); // Link it
-  glUseProgram(shaderProgram); // Use it
-
+  ShaderUtil::ConfigureDefaultShaderAttributes(defaultShaderProgram);
+  
   GLuint vertexArrayObjectHandle;
   glGenVertexArrays(1, &vertexArrayObjectHandle);
   glBindVertexArray(vertexArrayObjectHandle);  
 
-  // Get the position of the "postition" argument in vertex shader:
-  GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-  // Describe the input type for posAttrib (vertices array)
-  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), 0);
-  glEnableVertexAttribArray(posAttrib);
+  // Create device object able to store texture in graphics card memory:
+  GLuint tex;
+  glGenTextures(1, &tex);
+  glBindTexture(GL_TEXTURE_2D, tex); // Bind so we can apply operations to it
+ 
+  // Load Texture: 
+  // Black/white checkerboard
+  int width, height;
+  unsigned char* image = SOIL_load_image("resources/images/dark_wooden_create.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+  SOIL_free_image_data(image); // Free SOIL's handle to the image/memory since it's in GPU now
 
-  // Get the position of the "color" argument in vertex shader:
-  GLint colorAttrib = glGetAttribLocation(shaderProgram, "color");
-  // Describe the input type for colorAttrib (color position in vertices array)
-  glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void*)(2*sizeof(float)));
-  glEnableVertexAttribArray(colorAttrib);
+  // Configure texture parameters:
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat texture X
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat texture Y
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glGenerateMipmap(GL_TEXTURE_2D);
 
-  while(windowShouldStayOpen()) {
-      
-      window.clearCurrentBuffer();
+  while(windowShouldStayOpen()) // Check if the ESC key was pressed or the window was closed
+  {  
+    window.clearCurrentBuffer();
 
-      // Draw
-      glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-      window.swapBuffersAndCheckForEvents();
-  } // Check if the ESC key was pressed or the window was closed
+    window.swapBuffersAndCheckForEvents();
+  } 
+
+  // Free up all the memoriez:
+  glDeleteTextures(1, &tex);
+
+  glDeleteProgram(defaultShaderProgram);
+  // glDeleteShader(fragmentShader);
+  // glDeleteShader(vertexShader);
+  glDeleteBuffers(1, &elementBufferObjectHandle);
+  glDeleteBuffers(1, &vertexBufferObjectHandle);
+  glDeleteVertexArrays(1, &vertexArrayObjectHandle);
 
   return 0;
 }

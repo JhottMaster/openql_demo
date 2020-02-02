@@ -11,7 +11,9 @@ class ShaderUtil {
   
     static GLuint LoadShader(int shader_type, const char * vertex_shader_name);
     static std::string GetShaderPath(const char * shader_name, int shader_type);
-    static bool TryCompileShader(GLuint shader, bool printErrors = false);
+    static bool TryCompileShader(GLuint shader, bool printErrors = true);
+    static GLuint BuildDefaultShaderProgram();
+    static void ConfigureDefaultShaderAttributes(GLuint defaultShaderProgram);
 };
 
 #endif 

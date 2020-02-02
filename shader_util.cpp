@@ -34,6 +34,46 @@ bool ShaderUtil::TryCompileShader(GLuint shader, bool printErrors) {
 	return (status == GL_TRUE);
 }
 
+// This should probably go into its own class for shader programs:
+GLuint ShaderUtil::BuildDefaultShaderProgram() {
+  GLuint vertexShader = ShaderUtil::LoadShader(GL_VERTEX_SHADER, "2d_triangle");
+  if (!ShaderUtil::TryCompileShader(vertexShader)) return 0;
+  
+  GLuint fragmentShader = ShaderUtil::LoadShader(GL_FRAGMENT_SHADER, "2d_triangle");
+  if (!ShaderUtil::TryCompileShader(fragmentShader)) return 0;
+
+	// Now we'll need a complete program "pipeline"
+  GLuint shaderProgram = glCreateProgram();
+  glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, fragmentShader);
+  // Fragment shader is allowed to write to multiple buffers, so explicitly specify
+  // which output is written to which buffer (0) before linking the program:
+  glBindFragDataLocation(shaderProgram, 0, "outColor");
+  glLinkProgram(shaderProgram); // Link it
+  
+	return shaderProgram;
+}
+
+// This should probably go into its own class for shader programs:
+void ShaderUtil::ConfigureDefaultShaderAttributes(GLuint defaultShaderProgram) {
+	// Get the position of the "postition" argument in vertex shader:
+  GLint posAttrib = glGetAttribLocation(defaultShaderProgram, "position");
+  // Describe the input type for posAttrib (vertices array)
+  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), 0);
+  glEnableVertexAttribArray(posAttrib);
+
+	// Get the position of the "color" argument in vertex shader:
+  GLint colorAttrib = glGetAttribLocation(defaultShaderProgram, "color");
+  // Describe the input type for colorAttrib (color position in vertices array)
+  glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(2*sizeof(GLfloat)));
+  glEnableVertexAttribArray(colorAttrib);
+
+	// Get the position of the "texcoord" argument in vertex shader:
+	GLint texAttrib = glGetAttribLocation(defaultShaderProgram, "texcoord");
+	glEnableVertexAttribArray(texAttrib);
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(5*sizeof(GLfloat)));
+}
+
 std::string ShaderUtil::GetShaderPath(const char * shader_name, int shader_type) {
 	std::string fullPath = "";
 
