@@ -1,7 +1,7 @@
 # Cross-platform compilation:
 CC=g++
 BASE_LINKED_LIBRARIES=-lGLEW -lglfw -lSOIL
-OSX_LINKED_LIBRARIES=-framework OpenGL
+OSX_LINKED_LIBRARIES=-framework OpenGL -framework CoreFoundation
 UNIX_LINKED_LIBRARIES=-Wall -lGL
 
 # Build configuration:
