@@ -2,21 +2,21 @@
 
 // This should probably go into its own class for shader programs:
 bool ShaderProgram::ConfigureDefaultShaderProgram() {
-  VertexShader = ShaderUtil::LoadShader(GL_VERTEX_SHADER, "2d_triangle");
-  if (!ShaderUtil::TryCompileShader(VertexShader)) return false;
+  vertexShader = ShaderUtil::LoadShader(GL_VERTEX_SHADER, "2d_triangle");
+  if (!ShaderUtil::TryCompileShader(vertexShader)) return false;
   
-  FragmentShader = ShaderUtil::LoadShader(GL_FRAGMENT_SHADER, "2d_triangle");
-  if (!ShaderUtil::TryCompileShader(FragmentShader)) return false;
+  fragmentShader = ShaderUtil::LoadShader(GL_FRAGMENT_SHADER, "2d_triangle");
+  if (!ShaderUtil::TryCompileShader(fragmentShader)) return false;
 
 	// Now we'll need a complete program "pipeline"
-  ShaderProgram = glCreateProgram();
-  glAttachShader(ShaderProgram, VertexShader);
-  glAttachShader(ShaderProgram, FragmentShader);
+  shaderProgram = glCreateProgram();
+  glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, fragmentShader);
   // Fragment shader is allowed to write to multiple buffers, so explicitly specify
   // which output is written to which buffer (0) before linking the program:
-  glBindFragDataLocation(ShaderProgram, 0, "outColor");
-  glLinkProgram(ShaderProgram); // Link it
-  glUseProgram(ShaderProgram); // Use it
+  glBindFragDataLocation(shaderProgram, 0, "outColor");
+  glLinkProgram(shaderProgram); // Link it
+  glUseProgram(shaderProgram); // Use it
 
   // We were successful
   return true;
@@ -25,26 +25,26 @@ bool ShaderProgram::ConfigureDefaultShaderProgram() {
 // This should probably go into its own class for shader programs:
 void ShaderProgram::ConfigureDefaultShaderAttributes() {
 	// Get the position of the "postition" argument in vertex shader:
-  PositionAttribute = glGetAttribLocation(ShaderProgram, "position");
-  // Describe the input type for PositionAttribute (vertices array)
-  glVertexAttribPointer(PositionAttribute, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), 0);
-  glEnableVertexAttribArray(PositionAttribute);
+  positionAttribute = glGetAttribLocation(shaderProgram, "position");
+  // Describe the input type for positionAttribute (vertices array)
+  glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), 0);
+  glEnableVertexAttribArray(positionAttribute);
 
 	// Get the position of the "color" argument in vertex shader:
-  ColorAttribute = glGetAttribLocation(ShaderProgram, "color");
-  // Describe the input type for ColorAttribute (color position in vertices array)
-  glVertexAttribPointer(ColorAttribute, 3, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(2*sizeof(GLfloat)));
-  glEnableVertexAttribArray(ColorAttribute);
+  colorAttribute = glGetAttribLocation(shaderProgram, "color");
+  // Describe the input type for colorAttribute (color position in vertices array)
+  glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(2*sizeof(GLfloat)));
+  glEnableVertexAttribArray(colorAttribute);
 
 	// Get the position of the "texcoord" argument in vertex shader:
-	TextureAttribute = glGetAttribLocation(ShaderProgram, "texcoord");
-	glVertexAttribPointer(TextureAttribute, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(5*sizeof(GLfloat)));
-	glEnableVertexAttribArray(TextureAttribute);
+	textureAttribute = glGetAttribLocation(shaderProgram, "texcoord");
+	glVertexAttribPointer(textureAttribute, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(5*sizeof(GLfloat)));
+	glEnableVertexAttribArray(textureAttribute);
 }
 
 // Destructor cleans up objects
 ShaderProgram::~ShaderProgram(void) {
-  glDeleteProgram(ShaderProgram);
-  glDeleteShader(FragmentShader);
-  glDeleteShader(VertexShader);
+  glDeleteProgram(shaderProgram);
+  glDeleteShader(fragmentShader);
+  glDeleteShader(vertexShader);
 }

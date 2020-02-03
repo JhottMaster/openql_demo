@@ -4,13 +4,13 @@
 
 class ShaderProgram {
   public:
-    GLuint ShaderProgram;
-    GLuint VertexShader;
-    GLuint FragmentShader;
+    GLuint shaderProgram;
+    GLuint vertexShader;
+    GLuint fragmentShader;
 
-    GLint PositionAttribute;    
-    GLint ColorAttribute;
-    GLint TextureAttribute;
+    GLint positionAttribute;    
+    GLint colorAttribute;
+    GLint textureAttribute;
 
     bool ConfigureDefaultShaderProgram(); 
     void ConfigureDefaultShaderAttributes();
