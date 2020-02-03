@@ -36,11 +36,11 @@ int main() {
 
   // Build, compile, and link our vertex and fragment shares into a program:
   ShaderProgram defaultShaderProgram;
-  if (!defaultShaderProgram.ConfigureDefaultShaderProgram()) return false;;
+  if (!defaultShaderProgram.ConfigureDefaultShaderProgram()) return 0;;
   defaultShaderProgram.ConfigureDefaultShaderAttributes();
 
   GLuint textureObjectHandle = ShaderUtil::CreateAndBindTexture(1);
-  if (!ShaderUtil::LoadRGBTexture("resources/images/dark_wooden_crate.jpg")) return false;
+  if (!ShaderUtil::LoadRGBTexture("resources/images/dark_wooden_crate.jpg")) return 0;
 
   while(windowShouldStayOpen()) {
       window.clearCurrentBuffer();
