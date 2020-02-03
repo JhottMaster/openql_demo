@@ -70,8 +70,8 @@ void ShaderUtil::ConfigureDefaultShaderAttributes(GLuint defaultShaderProgram) {
 
 	// Get the position of the "texcoord" argument in vertex shader:
 	GLint texAttrib = glGetAttribLocation(defaultShaderProgram, "texcoord");
-	glEnableVertexAttribArray(texAttrib);
 	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(5*sizeof(GLfloat)));
+	glEnableVertexAttribArray(texAttrib);
 }
 
 std::string ShaderUtil::GetShaderPath(const char * shader_name, int shader_type) {

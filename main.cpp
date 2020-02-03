@@ -17,9 +17,11 @@ int main() {
   window.initialize("Open GL Demo", 1000, 768);
 
   float vertices[] = {
-    0.0f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Vertex 1: Red
-    0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // Vertex 2: Green
-    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f  // Vertex 3: Blue
+  //  Position      Color             Texcoords
+    -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
+    0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
+    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
+    -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
   };
 
   // Create device object to store vertex data in graphics card memory:
@@ -29,6 +31,18 @@ int main() {
   // Let's make it the active object so we can do stuff with it:
   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjectHandle);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  // // Create an element array
+  // GLuint elementBufferObjectHanle;
+  // glGenBuffers(1, &elementBufferObjectHanle);
+
+  // GLuint vertixTriangleIndex[] = {
+  //     0, 1, 2,
+  //     2, 3, 0
+  // };
+
+  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObjectHanle);
+  // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertixTriangleIndex), vertixTriangleIndex, GL_STATIC_DRAW);
 
   // Build, compile, and link our vertex and fragment shares into a program:
   GLuint defaultShaderProgram = ShaderUtil::BuildDefaultShaderProgram();
@@ -41,24 +55,26 @@ int main() {
   ShaderUtil::ConfigureDefaultShaderAttributes(defaultShaderProgram);
 
   // Create device object able to store texture in graphics card memory:
-  GLuint tex;
-  glGenTextures(1, &tex);
-  glBindTexture(GL_TEXTURE_2D, tex); // Bind so we can apply operations to it
+  GLuint textureObjectHandle;
+  glGenTextures(1, &textureObjectHandle);
+  glBindTexture(GL_TEXTURE_2D, textureObjectHandle); // Bind so we can apply operations to it
  
-
   // Load Texture: 
   // Black/white checkerboard
   int width, height;
-  unsigned char* image = SOIL_load_image("resources/images/dark_wooden_create.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+  unsigned char* image = SOIL_load_image("resources/images/dark_wooden_crate.jpg", &width, &height, 0, SOIL_LOAD_RGB);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+  if(image == nullptr) {
+    printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+    return false;
+  }
+  SOIL_free_image_data(image);
 
-  // Configure texture parameters:
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Repeat texture X
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Repeat texture Y
-  // Configure texture filtering:
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glGenerateMipmap(GL_TEXTURE_2D);
+
 
   while(windowShouldStayOpen()) {
       
