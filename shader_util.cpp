@@ -34,46 +34,6 @@ bool ShaderUtil::TryCompileShader(GLuint shader, bool printErrors) {
 	return (status == GL_TRUE);
 }
 
-// This should probably go into its own class for shader programs:
-GLuint ShaderUtil::BuildDefaultShaderProgram() {
-  GLuint vertexShader = ShaderUtil::LoadShader(GL_VERTEX_SHADER, "2d_triangle");
-  if (!ShaderUtil::TryCompileShader(vertexShader)) return 0;
-  
-  GLuint fragmentShader = ShaderUtil::LoadShader(GL_FRAGMENT_SHADER, "2d_triangle");
-  if (!ShaderUtil::TryCompileShader(fragmentShader)) return 0;
-
-	// Now we'll need a complete program "pipeline"
-  GLuint shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  // Fragment shader is allowed to write to multiple buffers, so explicitly specify
-  // which output is written to which buffer (0) before linking the program:
-  glBindFragDataLocation(shaderProgram, 0, "outColor");
-  glLinkProgram(shaderProgram); // Link it
-  
-	return shaderProgram;
-}
-
-// This should probably go into its own class for shader programs:
-void ShaderUtil::ConfigureDefaultShaderAttributes(GLuint defaultShaderProgram) {
-	// Get the position of the "postition" argument in vertex shader:
-  GLint posAttrib = glGetAttribLocation(defaultShaderProgram, "position");
-  // Describe the input type for posAttrib (vertices array)
-  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), 0);
-  glEnableVertexAttribArray(posAttrib);
-
-	// Get the position of the "color" argument in vertex shader:
-  GLint colorAttrib = glGetAttribLocation(defaultShaderProgram, "color");
-  // Describe the input type for colorAttrib (color position in vertices array)
-  glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(2*sizeof(GLfloat)));
-  glEnableVertexAttribArray(colorAttrib);
-
-	// Get the position of the "texcoord" argument in vertex shader:
-	GLint texAttrib = glGetAttribLocation(defaultShaderProgram, "texcoord");
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(GLfloat), (void*)(5*sizeof(GLfloat)));
-	glEnableVertexAttribArray(texAttrib);
-}
-
 std::string ShaderUtil::GetShaderPath(const char * shader_name, int shader_type) {
 	std::string fullPath = "";
 
@@ -93,4 +53,62 @@ std::string ShaderUtil::GetShaderPath(const char * shader_name, int shader_type)
 			printf("ERROR: Unknown shader type code %d!", shader_type); 
 	}
 	return fullPath;
+}
+
+// Should this go into some sort of global manager?
+GLuint ShaderUtil::CreateAndBindVertexArray(int slot) {
+	GLuint vertexArrayObjectHandle;
+  glGenVertexArrays(slot, &vertexArrayObjectHandle);
+  glBindVertexArray(vertexArrayObjectHandle);  
+	return vertexArrayObjectHandle;
+}
+
+// Should this go into some sort of global manager?
+GLuint ShaderUtil::CreateAndBindVertexBufferObject(int slot, float* vertices, int size) {
+  // Create device object to store vertex data in graphics card memory:
+  GLuint vertexBufferObjectHandle;
+  glGenBuffers(slot, &vertexBufferObjectHandle); // Create device and assign to handle
+  // Let's make it the active object so we can do stuff with it:
+  glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjectHandle);
+  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);  
+	return vertexBufferObjectHandle;
+}
+
+// Should this go into some sort of global manager?
+GLuint ShaderUtil::CreateAndBindElementBufferObject(int slot, GLuint* indexes, int size) {
+	// Create an element array
+  GLuint elementBufferObjectHanle;
+  glGenBuffers(slot, &elementBufferObjectHanle);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObjectHanle);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indexes, GL_STATIC_DRAW);
+	return elementBufferObjectHanle;
+}
+
+// Should this go into some sort of texture manager?
+GLuint ShaderUtil::CreateAndBindTexture(int slot, GLenum type) {
+	// Create device object able to store texture in graphics card memory:
+  GLuint textureObjectHandle;
+  glGenTextures(slot, &textureObjectHandle);
+  glBindTexture(type, textureObjectHandle); // Bind so we can apply operations to it
+	return textureObjectHandle;
+}
+
+// Should this go into some sort of texture manager?
+bool ShaderUtil::LoadRGBTexture(const char * file_path, GLenum type) {
+	int width, height;
+  unsigned char* image = SOIL_load_image(file_path, &width, &height, 0, SOIL_LOAD_RGB);
+  glTexImage2D(type, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+  if(image == nullptr) {
+    printf("SOIL Texture Error; Could not load '%s':\n'%s'\n\n", file_path, SOIL_last_result());
+    return false;
+  }
+  SOIL_free_image_data(image);
+
+  glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return true;
 }
