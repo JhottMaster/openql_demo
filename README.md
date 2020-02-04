@@ -46,6 +46,37 @@ This architecture requires the OSX Core Foundation framework, hence the addition
 
 Build & run with `make osx`
 
+## Windows
+Right now this is only tested on Windows 10. To compile, you'll need to do the following:
+
+*Compiler Setup*
+1.) Install MinGW- download from: https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/ (Good reference guide here as well: https://www.ics.uci.edu/~pattis/common/handouts/mingweclipse/mingw.html)
+2.) After download, use the MinGW Installation Manager to install mingw32-base, mingw-developer-toolchain, mingw32-gcc-g++, and msys-base
+3.) Wait a while for all that to finish, then add `C:\MinGW\bin` and `C:\MinGW\msys\1.0\bin` to your PATH enviornment variable.
+
+*GLEW Install*
+Download GLEW, unzip, go to main dir and run:
+```
+mkdir lib
+mkdir bin
+gcc -DGLEW_NO_GLU -O2 -Wall -W -Iinclude  -DGLEW_BUILD -o src/glew.o -c src/glew.c
+gcc -nostdlib -shared -Wl,-soname,libglew32.dll -Wl,--out-implib,lib/libglew32.dll.a    -o lib/glew32.dll src/glew.o -L/mingw/lib -lglu32 -lopengl32 -lgdi32 -luser32 -lkernel32
+ar cr lib/libglew32.a src/glew.o
+```
+Details here: https://stackoverflow.com/questions/6005076/building-glew-on-windows-with-mingw
+
+You should now have a `glew32.dll` file you can use under `\lib`- move that binary to the `\lib\win\binaries` folder.
+
+*GLFW Install*
+1.) Download GLFW 32-bit binaries: https://www.glfw.org/download.html
+2.) Unzip, and navigate to `glfw-3.3.2.bin.WIN32\lib-mingw`
+3.) Copy the `glfw3.dll` binary to `\lib\win\binaries` folder
+
+*SOILD Install*
+
+Add a new environment variable called `CPATH` that points to `\lib\win\headers` (but use a full path)
+
+
 ## Other helpful resources:
 - https://open.gl/introduction
 
