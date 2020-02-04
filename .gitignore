@@ -4,10 +4,17 @@
 *.class
 *.dll
 *.exe
+*.ilk
+*.pdb
 *.o
 *.so
 # Precompiled headers:
 *.gch
 
 # Compilation outputs:
-build/
+build/*
+
+# Visual Studio Artifacts (`.vs/jheatt_engine/v*/` folder)
+*.ipch
+*.VC.db
+*.VC.opendb

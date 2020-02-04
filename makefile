@@ -1,28 +1,40 @@
 # Cross-platform compilation:
-CC=g++
-BASE_LINKED_LIBRARIES=-lGLEW -lglfw -lSOIL
-OSX_LINKED_LIBRARIES=-framework OpenGL -framework CoreFoundation
-UNIX_LINKED_LIBRARIES=-Wall -lGL
+CC=g++ # Uses clang in OSX
+LNK_FLAGS=-lGLEW -lglfw -lSOIL
+OSX_LNK_FLAGS=-framework OpenGL -framework CoreFoundation
+NIX_LNK_FLAGS=-Wall -lGL
+LIB_HEADER_DIR=./additional_includes/
 
 # Build configuration:
-EXECUTABLE_NAME=open_gl_demo
-BUILD_DIRECTORY=build/bin/
-OUTPUT_DIRECTORY=build/
-
+EXEC_NAME=jheatt_engine
+SRC_DIR=./jheatt_engine
+OUT_DIR=./build
 
 unix: build_unix
-	./$(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME)
+	@echo "Creating output dirs..."
+	cp -u -r $(SRC_DIR)/shaders $(OUT_DIR)/shaders
+	cp -u -r $(SRC_DIR)/resources $(OUT_DIR)/resources
+	@echo "Finished! Running:"
+	cd $(OUT_DIR)/; ./$(EXEC_NAME)
 
 osx: build_osx
-	./$(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME)
+	@echo "Moving & renaming executable (a.out)..."
+	mv ./a.out $(OUT_DIR)/$(EXEC_NAME)
+	@echo "Creating output dirs..."
+	cp -f -R $(SRC_DIR)/shaders $(OUT_DIR)/shaders
+	cp -f -R $(SRC_DIR)/resources $(OUT_DIR)/resources
+	@echo "Finished! Running:"
+	cd $(OUT_DIR)/; ./$(EXEC_NAME)
 
-build_osx: main.cpp
-	@mkdir -p $(OUTPUT_DIRECTORY)
-	$(CC) -o $(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME) *.cpp $(OSX_LINKED_LIBRARIES) $(BASE_LINKED_LIBRARIES)
+build_osx:
+	@mkdir -p $(OUT_DIR)/
+	@echo "Building..."
+	$(CC) $(shell find '$(SRC_DIR)' -name '*.*pp') $(OSX_LNK_FLAGS) $(LNK_FLAGS) -I$(LIB_HEADER_DIR)
 
-build_unix: main.cpp
-	@mkdir -p $(OUTPUT_DIRECTORY)
-	$(CC) -o $(OUTPUT_DIRECTORY)$(EXECUTABLE_NAME) *.*pp $(UNIX_LINKED_LIBRARIES) $(BASE_LINKED_LIBRARIES)
+build_unix:
+	@mkdir -p $(OUT_DIR)/
+	@echo "Building..."
+	$(CC) -o $(OUT_DIR)/$(EXEC_NAME) $(shell find -regex '$(SRC_DIR)*.*pp' -type f) $(NIX_LNK_FLAGS) $(LNK_FLAGS) -I$(LIB_HEADER_DIR)
 
 clean:
-	rm $(OUTPUT_DIRECTORY)*
+	rm $(OUT_DIR)/*
