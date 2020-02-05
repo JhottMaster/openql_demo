@@ -29,7 +29,7 @@ build_unix: main.cpp
 
 build_windows: main.cpp
 	if not exist $(OUTPUT_DIRECTORY)\ mkdir $(OUTPUT_DIRECTORY)\;
-	$(CC) -o $(OUTPUT_DIRECTORY)\$(EXECUTABLE_NAME).exe *.*pp -L"lib\win\binaries" -lSOIL -lopengl32 -lglfw3 -lglew32 -mwindows
+	$(CC) -o $(OUTPUT_DIRECTORY)\$(EXECUTABLE_NAME).exe *.*pp -L"lib\win\binaries" -Bstatic -lSOIL -lopengl32 -lglfw3 -lglew32 -mwindows 
 
 clean:
 	rm $(OUTPUT_DIRECTORY)*
