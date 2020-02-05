@@ -1,11 +1,12 @@
 # Open GL Tutorials/Demo
 Following Tutorials for OpenGL in C++
 
-## Tutorials & Notes
+## Notes
 
-**Tutorial 1**
+**Open GL Resources Used**
 - http://www.opengl-tutorial.org/beginners-tutorials/tutorial-1-opening-a-window/
-  - Refactored a lot of the window setup code to its own class & improved code readability.
+- https://open.gl/introduction
+- https://learnopengl.com/Introduction
 
 ## Ubuntu Setup
 
@@ -47,7 +48,20 @@ This architecture requires the OSX Core Foundation framework, hence the addition
 Build & run with `make osx`
 
 ## Windows
+
 Right now this is only tested on Windows 10. To compile, you'll need to do the following:
+
+**Using Visual Studio 2019**
+
+Just open the solution file. 
+The special configuratios is mostly in the creation of the `additional_includes` and `additional_libs` directories. GLM you can just download since it's only headers. But might need to build GLEW and SOIL (SOILD Repo: https://github.com/littlstar/soil )
+
+**Other (eg, using `make` or `cmake`)**
+
+I spent a few hours trying to get Windows version to compile and work with just make, MinGW, GLEW, GLFW, and soild, but alas, I couldn't manage it. If feeling adventurous, this looks like a good guide to try again: https://cis.gvsu.edu/~dulimarh/Okto/cis367/
+
+<details><summary>This was the closest I got</summary>
+<p>
 
 *Compiler Setup*
 1.) Install MinGW- download from: https://osdn.net/projects/mingw/downloads/68260/mingw-get-setup.exe/ (Good reference guide here as well: https://www.ics.uci.edu/~pattis/common/handouts/mingweclipse/mingw.html)
@@ -72,9 +86,19 @@ You should now have a `glew32.dll` file you can use under `\lib`- move that bina
 2.) Unzip, and navigate to `glfw-3.3.2.bin.WIN32\lib-mingw`
 3.) Copy the `glfw3.dll` binary to `\lib\win\binaries` folder
 
-*SOILD Install*
+*SOIL Install*
+
+Download https://www.lonesock.net/soil.html
+
+*Last Steps*
 
 Add a new environment variable called `CPATH` that points to `\lib\win\headers` (but use a full path)
+
+</p>
+</details>
+
+
+
 
 
 ## Other helpful resources:
