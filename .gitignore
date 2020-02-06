@@ -13,5 +13,5 @@
 
 # Compilation outputs:
 build/
-jheatt_engine/.vs/
-.vs/
+jheatt_engine/.vs/*
+.vs/*
