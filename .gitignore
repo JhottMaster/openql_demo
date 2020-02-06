@@ -13,6 +13,4 @@
 
 # Compilation outputs:
 build/
-Debug/
-open_gl_demo/Debug/
-.vs/open_gl_demo/v16/ipch/
+.vs/open_gl_demo/
