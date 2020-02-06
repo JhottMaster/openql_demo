@@ -21,8 +21,8 @@ unix: build_unix
 	cd $(OUTPUT_DIRECTORY); ./$(EXECUTABLE_NAME)
 
 osx: build_osx
-		cp -u -r $(SOURCE_DIRECTORY)shaders $(OUTPUT_DIRECTORY)shaders
-	cp -u -r $(SOURCE_DIRECTORY)resources $(OUTPUT_DIRECTORY)resources
+	cp -f -R $(SOURCE_DIRECTORY)shaders $(OUTPUT_DIRECTORY)shaders
+	cp -f -R $(SOURCE_DIRECTORY)resources $(OUTPUT_DIRECTORY)resources
 	cd $(OUTPUT_DIRECTORY); ./$(EXECUTABLE_NAME)
 
 build_osx:
