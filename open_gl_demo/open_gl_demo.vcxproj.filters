@@ -13,35 +13,38 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{49dde553-6bb7-41c4-b195-6e6cfea7f1e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="open_gl_demo.cpp">
+    <ClCompile Include="source/open_gl_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="window_manager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="source/lib/file_utils.cpp">
+      <Filter>lib</Filter>
     </ClCompile>
-    <ClCompile Include="file_utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="source/lib/shader_program.cpp">
+      <Filter>lib</Filter>
     </ClCompile>
-    <ClCompile Include="shader_util.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="source/lib/shader_util.cpp">
+      <Filter>lib</Filter>
     </ClCompile>
-    <ClCompile Include="shader_program.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="source/lib/window_manager.cpp">
+      <Filter>lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="window_manager.hpp">
+    <ClInclude Include="source/lib/file_utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="file_utils.hpp">
+    <ClInclude Include="source/lib/shader_program.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shader_util.hpp">
+    <ClInclude Include="source/lib/shader_util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shader_program.hpp">
+    <ClInclude Include="source/lib/window_manager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

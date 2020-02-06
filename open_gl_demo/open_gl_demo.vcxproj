@@ -150,17 +150,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="file_utils.cpp" />
-    <ClCompile Include="open_gl_demo.cpp" />
-    <ClCompile Include="shader_program.cpp" />
-    <ClCompile Include="shader_util.cpp" />
-    <ClCompile Include="window_manager.cpp" />
+    <ClCompile Include="source/open_gl_demo.cpp" />
+	<ClCompile Include="source/lib/file_utils.cpp" />
+    <ClCompile Include="source/lib/shader_program.cpp" />
+    <ClCompile Include="source/lib/shader_util.cpp" />
+    <ClCompile Include="source/lib/window_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="file_utils.hpp" />
-    <ClInclude Include="shader_program.hpp" />
-    <ClInclude Include="shader_util.hpp" />
-    <ClInclude Include="window_manager.hpp" />
+    <ClInclude Include="source/lib/file_utils.hpp" />
+    <ClInclude Include="source/lib/shader_program.hpp" />
+    <ClInclude Include="source/lib/shader_util.hpp" />
+    <ClInclude Include="source/lib/window_manager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\2d_triangle.frag" />

@@ -1,9 +1,9 @@
 #define GLEW_STATIC
 
-#include "window_manager.hpp"
-#include "file_utils.hpp"
-#include "shader_util.hpp"
-#include "shader_program.hpp"
+#include "lib/window_manager.hpp"
+#include "lib/file_utils.hpp"
+#include "lib/shader_util.hpp"
+#include "lib/shader_program.hpp"
 
 using namespace glm;
 
