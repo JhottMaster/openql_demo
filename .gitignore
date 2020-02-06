@@ -13,5 +13,9 @@
 
 # Compilation outputs:
 build/
-jheatt_engine/.vs/*
-.vs/*
+# jheatt_engine/.vs/*
+# .vs/*
+
+# Visual Studio Artifacts (`.vs/jheatt_engine/v*/` folder)
+.db
+.ipch
