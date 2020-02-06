@@ -12,10 +12,8 @@
 *.gch
 
 # Compilation outputs:
-build/
-# jheatt_engine/.vs/*
-# .vs/*
+build/*
 
 # Visual Studio Artifacts (`.vs/jheatt_engine/v*/` folder)
-.db
-.ipch
+*.ipch
+*.VC.db
