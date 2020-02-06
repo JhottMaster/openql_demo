@@ -168,17 +168,14 @@
   <ItemGroup>
     <None Include="jheatt_engine\shaders\2d_triangle.frag">
       <DeploymentContent>true</DeploymentContent>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="jheatt_engine\shaders\2d_triangle.vert">
       <DeploymentContent>true</DeploymentContent>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="jheatt_engine\resources\images\dark_wooden_crate.jpg">
       <DeploymentContent>true</DeploymentContent>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

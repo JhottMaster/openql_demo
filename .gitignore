@@ -13,4 +13,5 @@
 
 # Compilation outputs:
 build/
-.vs/open_gl_demo/
+jheatt_engine/.vs/
+.vs/

@@ -22,16 +22,16 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="jheatt_engine/lib/file_utils.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>lib</Filter>
     </ClCompile>
     <ClCompile Include="jheatt_engine/lib/shader_program.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>lib</Filter>
     </ClCompile>
     <ClCompile Include="jheatt_engine/lib/shader_util.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>lib</Filter>
     </ClCompile>
     <ClCompile Include="jheatt_engine/lib/window_manager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,8 +49,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="jheatt_engine\shaders\2d_triangle.frag" />
-    <None Include="jheatt_engine\shaders\2d_triangle.vert" />
+    <None Include="jheatt_engine\shaders\2d_triangle.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="jheatt_engine\shaders\2d_triangle.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="jheatt_engine\resources\images\dark_wooden_crate.jpg">
