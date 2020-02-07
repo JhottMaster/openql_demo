@@ -7,6 +7,7 @@ const char* ShaderUtil::FRAGMENT_SHADER_EXTENSION = ".frag";
 GLuint ShaderUtil::LoadShader(int shader_type, const char* shader_name) {
     // Create a vertex shader object on the device to store shader program:
     GLuint shader = glCreateShader(shader_type);
+    if (shader == 0) { return 0; printf("Error creating vertex array"); }
 
     // Load shader program from file:
     std::string path = GetShaderPath(shader_name, shader_type);
@@ -27,9 +28,9 @@ bool ShaderUtil::TryCompileShader(GLuint shader, bool printErrors) {
 
       // Output "call stack" if we can get it:
     if (status != GL_TRUE && printErrors) {
-        printf("Could not compile vertex shader! Callstack: \n");
         char buffer[512];
         glGetShaderInfoLog(shader, 512, NULL, buffer);
+        printf("Could not compile shader! Callstack:\n%s", buffer);
     }
     return (status == GL_TRUE);
 }
