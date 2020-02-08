@@ -16,8 +16,18 @@ bool ShaderProgram::ConfigureDefaultShaderProgram() {
     // which output is written to which buffer (0) before linking the program:
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram); // Link it
-    glUseProgram(shaderProgram); // Use it
 
+    GLint status; // This will store compilation output result
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
+    if (!status) {
+        char buffer[512];
+        glGetProgramInfoLog(shaderProgram, 512, NULL, buffer);
+        printf("Could not compile shader program! Callstack:\n%s", buffer);
+        return false;
+    }
+
+    glUseProgram(shaderProgram); // Use it
+    
     // We were successful
     return true;
 }
@@ -45,6 +55,9 @@ void ShaderProgram::ConfigureDefaultShaderAttributes() {
 // Destructor cleans up objects
 ShaderProgram::~ShaderProgram(void) {
     glDeleteProgram(shaderProgram);
+
+    // Delete shaders- technically we could actually delete them right 
+    // after linking the shader program, but we do it here:
     glDeleteShader(fragmentShader);
     glDeleteShader(vertexShader);
 }
