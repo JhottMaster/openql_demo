@@ -5,6 +5,7 @@
 #include "lib/shader_util.hpp"
 #include "lib/shader.hpp"
 #include "lib/texture_object.hpp"
+#include "lib/mesh.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -38,25 +39,11 @@ int main() {
     */
     GLuint vertexArrayObjectHandle = ShaderUtil::CreateAndBindVertexArray(1);
 
-    // Create array of vertex:
-    float vertices[] = {
-        //  Position       Color               Texcoords
-        //  X      Y       R     G     B       U     V
-            -0.5f, 0.5f,   1.0f, 0.5f, 0.5f,   0.0f, 0.0f, // Top-left
-            0.5f,  0.5f,   0.5f, 1.0f, 0.5f,   1.0f, 0.0f, // Top-right
-            0.5f, -0.5f,   0.5f, 0.5f, 1.0f,   1.0f, 1.0f, // Bottom-right
-            -0.5f,-0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // Bottom-left
-    };
+    Mesh plane = Mesh::Cube(1);
 
     // Create our vertex buffer on GPU and copy our vertex array to it:
-    GLuint vertexBufferObjectHandle = ShaderUtil::CreateAndBindVertexBufferObject(1, vertices, sizeof(vertices));
-
-    // Create mappings of which vertex index are which points on triangles and bind to element buffer:
-    GLuint vertixTriangleIndex[] = {
-        0, 1, 2, // Triangle 1
-        2, 3, 0  // Triangle 2
-    };
-    GLuint elementBufferObjectHanle = ShaderUtil::CreateAndBindElementBufferObject(1, vertixTriangleIndex, sizeof(vertixTriangleIndex));
+    GLuint vertexBufferObjectHandle = ShaderUtil::CreateAndBindVertexBufferObject(1, plane.vertices, plane.sizeOfVertices());
+    GLuint elementBufferObjectHanle = ShaderUtil::CreateAndBindElementBufferObject(1, plane.vertex_triangle_indeces, plane.sizeOfIndex());
 
     TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg");
     TextureObject faceTexture = TextureObject("resources/images/awesomeface.png", 1);
@@ -102,7 +89,7 @@ int main() {
         int projectionLoc = glGetUniformLocation(simpleShader.shaderProgram, "projection");
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, plane.number_of_indexes, GL_UNSIGNED_INT, 0);
 
         window.swapBuffersAndCheckForEvents();
     }

@@ -46,18 +46,18 @@ void Shader::ConfigureAttributes() {
 	// Get the position of the "postition" argument in vertex shader:
 	GLint positionAttribute = glGetAttribLocation(shaderProgram, "position");
 	// Describe the input type for positionAttribute (vertices array)
-	glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 	glEnableVertexAttribArray(positionAttribute);
 
 	// Get the position of the "color" argument in vertex shader:
 	GLint colorAttribute = glGetAttribLocation(shaderProgram, "color");
 	// Describe the input type for colorAttribute (color position in vertices array)
-	glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(colorAttribute);
 
 	// Get the position of the "texcoord" argument in vertex shader:
 	GLint textureAttribute = glGetAttribLocation(shaderProgram, "texcoord");
-	glVertexAttribPointer(textureAttribute, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(5 * sizeof(GLfloat)));
+	glVertexAttribPointer(textureAttribute, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(textureAttribute);
 
 	configuredAttributes = true;

@@ -9,7 +9,7 @@ GLuint ShaderUtil::CreateAndBindVertexArray(int slot) {
     return vertexArrayObjectHandle;
 }
 
-// Should this go into some sorpt of global manager?
+// Should this go into some sort of global manager?
 GLuint ShaderUtil::CreateAndBindVertexBufferObject(int slot, float* vertices, int size) {
     // Create device object to store vertex data in graphics card memory:
     GLuint vertexBufferObjectHandle;
