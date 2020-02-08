@@ -64,6 +64,8 @@ int main() {
     glm::mat4 projection;
     projection = glm::perspective(glm::radians(45.0f), 1024.0f / 768.0f, 0.1f, 100.0f);
 
+    glEnable(GL_DEPTH_TEST);
+
     while (windowShouldStayOpen()) {
         window.clearCurrentBuffer();
         
@@ -78,8 +80,9 @@ int main() {
 
         mat4 trans = mat4(1.0f);
         trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        //trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
+        model = glm::rotate(model, sineWavValue * glm::radians(1.0f), glm::vec3(0.5f, 1.0f, 0.0f));  
         int modelLoc = glGetUniformLocation(simpleShader.shaderProgram, "model");
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -89,7 +92,8 @@ int main() {
         int projectionLoc = glGetUniformLocation(simpleShader.shaderProgram, "projection");
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 
-        glDrawElements(GL_TRIANGLES, plane.number_of_indexes, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, plane.number_of_indexes, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         window.swapBuffersAndCheckForEvents();
     }

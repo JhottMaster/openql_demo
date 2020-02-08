@@ -36,6 +36,7 @@ int WindowManager::initialize(const char* windowName, int width, int height) {
 
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
     return 0;
 }
@@ -62,5 +63,5 @@ void WindowManager::swapBuffersAndCheckForEvents() {
 }
 
 void WindowManager::clearCurrentBuffer() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
