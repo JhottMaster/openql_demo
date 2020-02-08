@@ -16,6 +16,7 @@
 
 class WindowManager {
 
+
 public:
     GLFWwindow* window;
     int initialize(const char* windowName, int width, int height);
@@ -24,6 +25,7 @@ public:
     bool windowKeyHit(int glfwKey);
     void swapBuffersAndCheckForEvents();
     void clearCurrentBuffer();
+    static void windowResizeCallback(GLFWwindow * window, int width, int height);
 };
 
 #endif 

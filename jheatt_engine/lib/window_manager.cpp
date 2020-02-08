@@ -24,8 +24,11 @@ int WindowManager::initialize(const char* windowName, int width, int height) {
         glfwTerminate();
         return -1;
     }
+
     glfwMakeContextCurrent(window); // Initialize GLEW
-    glewExperimental = true; // Needed in core profile
+    glViewport(0, 0, width, height);
+    glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&WindowManager::windowResizeCallback);  
+
     if (glewInit() != GLEW_OK) {
         fprintf(stderr, "Failed to initialize GLEW\n");
         return -1;
@@ -33,7 +36,12 @@ int WindowManager::initialize(const char* windowName, int width, int height) {
 
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+
     return 0;
+}
+
+void WindowManager::windowResizeCallback(GLFWwindow * window, int width, int height) {
+    glViewport(0, 0, width, height);
 }
 
 bool WindowManager::windowEspaceKeyHit() {

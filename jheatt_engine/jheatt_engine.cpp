@@ -6,7 +6,10 @@
 #include "lib/shader.hpp"
 #include "lib/texture_object.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 using namespace glm;
+
 
 // Declarations
 bool windowShouldStayOpen();
@@ -60,6 +63,7 @@ int main() {
     simpleShader.ConfigureAttributes();
 
     float timeValue, sineWavValue;
+
     while (windowShouldStayOpen()) {
         window.clearCurrentBuffer();
         
@@ -71,6 +75,13 @@ int main() {
 
         simpleShader.SetIntVariable("tex", 0); // or with shader class
         simpleShader.SetIntVariable("tex2", 1); // or with shader class
+
+        mat4 trans = mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        unsigned int transformLoc = glGetUniformLocation(simpleShader.shaderProgram, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
                 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
