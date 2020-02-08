@@ -5,7 +5,9 @@ const char* Shader::VERTEX_SHADER_EXTENSION = ".vert";
 const char* Shader::FRAGMENT_SHADER_EXTENSION = ".frag";
 
 Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFileName) {
-	compilationSuccessful = true;
+	configuredAttributes = false;
+	compilationFailed = false;
+
 	GLuint vertexShader = Shader::LoadShader(GL_VERTEX_SHADER, vertexShaderFileName);
 	if (!Shader::TryCompileShader(vertexShader)) return;
 
@@ -25,8 +27,8 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
 	// Output "call stack" if we can get it:
 	if (status != GL_TRUE) {
-			compilationSuccessful = false;
-			printf("Could not compile vertex shader!");
+			compilationFailed = true;
+			printf("Could not compile shader program!");
 			glGetProgramInfoLog(shaderProgram, 512, NULL, lastErrorCallStack);
 			return;
 	}
@@ -36,7 +38,35 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 	glDeleteShader(fragmentShader);
 }
 
+void Shader::ConfigureAttributes() {
+	if (compilationFailed) {
+		printf("WARNING: Attempting to configure attributes after failed shader compilation");
+	}
+
+	// Get the position of the "postition" argument in vertex shader:
+	GLint positionAttribute = glGetAttribLocation(shaderProgram, "position");
+	// Describe the input type for positionAttribute (vertices array)
+	glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(positionAttribute);
+
+	// Get the position of the "color" argument in vertex shader:
+	GLint colorAttribute = glGetAttribLocation(shaderProgram, "color");
+	// Describe the input type for colorAttribute (color position in vertices array)
+	glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(colorAttribute);
+
+	// Get the position of the "texcoord" argument in vertex shader:
+	GLint textureAttribute = glGetAttribLocation(shaderProgram, "texcoord");
+	glVertexAttribPointer(textureAttribute, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(5 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(textureAttribute);
+
+	configuredAttributes = true;
+}
+
 void Shader::UseShader() {
+	if (compilationFailed) {
+		printf("WARNING: Attempting to configure attributes after failed shader compilation");
+	}
 	glUseProgram(shaderProgram);
 }
 
@@ -78,8 +108,8 @@ bool Shader::TryCompileShader(GLuint shader, bool printErrors) {
 
     // Output "call stack" if we can get it:
     if (status != GL_TRUE && printErrors) {
-				compilationSuccessful = false;
-        printf("Could not compile vertex shader!");
+				compilationFailed = true;
+        printf("Could not compile shader!");
         glGetShaderInfoLog(shader, 512, NULL, lastErrorCallStack);
     }
     return (status == GL_TRUE);
@@ -105,3 +135,9 @@ std::string Shader::GetShaderPath(const char* shader_name, int shader_type) {
     }
     return fullPath;
 }
+
+// Destructor cleans up objects
+Shader::~Shader() {
+    glDeleteProgram(shaderProgram);
+}
+

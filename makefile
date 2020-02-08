@@ -12,6 +12,7 @@ OUT_DIR=./build
 
 unix: build_unix
 	@echo "Creating output dirs..."
+	rm -r $(OUT_DIR)/shaders
 	cp -u -r $(SRC_DIR)/shaders $(OUT_DIR)/shaders
 	cp -u -r $(SRC_DIR)/resources $(OUT_DIR)/resources
 	@echo "Finished! Running:"
@@ -21,6 +22,7 @@ osx: build_osx
 	@echo "Moving & renaming executable (a.out)..."
 	mv ./a.out $(OUT_DIR)/$(EXEC_NAME)
 	@echo "Creating output dirs..."
+	rm -r $(OUT_DIR)/shaders
 	cp -f -R $(SRC_DIR)/shaders $(OUT_DIR)/shaders
 	cp -f -R $(SRC_DIR)/resources $(OUT_DIR)/resources
 	@echo "Finished! Running:"
@@ -37,4 +39,4 @@ build_unix:
 	$(CC) -o $(OUT_DIR)/$(EXEC_NAME) $(shell find -regex '$(SRC_DIR)*.*pp' -type f) $(NIX_LNK_FLAGS) $(LNK_FLAGS) -I$(LIB_HEADER_DIR)
 
 clean:
-	rm $(OUT_DIR)/*
+	rm -r $(OUT_DIR)/*

@@ -3,8 +3,8 @@
 #include "lib/window_manager.hpp"
 #include "lib/file_utils.hpp"
 #include "lib/shader_util.hpp"
-#include "lib/shader_program.hpp"
 #include "lib/shader.hpp"
+#include "lib/texture_object.hpp"
 
 using namespace glm;
 
@@ -15,10 +15,13 @@ WindowManager window;
 
 int main() {
     window.initialize("Open GL Demo", 1024, 768);
-
-    // Build, compile, and link our vertex and fragment shares into a program:
-    ShaderProgram defaultShaderProgram;
-    if (!defaultShaderProgram.ConfigureDefaultShaderProgram()) return 0;
+    
+    // Setup shaders:
+    Shader simpleShader("basic", "basic");
+    if (simpleShader.compilationFailed) {
+        printf("\nLast Error:\n%s\n", simpleShader.lastErrorCallStack);
+        return 1;
+    }
 
     /*
     A VAO that stores our vertex attribute configuration and which VBO to use. 
@@ -52,13 +55,8 @@ int main() {
     };
     GLuint elementBufferObjectHanle = ShaderUtil::CreateAndBindElementBufferObject(1, vertixTriangleIndex, sizeof(vertixTriangleIndex));
 
-    // Configure out shaders on the current vertex array object:
-    defaultShaderProgram.ConfigureDefaultShaderAttributes();
-
-    GLuint textureObjectHandle = ShaderUtil::CreateAndBindTexture(1);
-    if (!ShaderUtil::LoadRGBTexture("resources/images/dark_wooden_crate.jpg")) return 0;
-
-    int brightnessMultiplier = glGetUniformLocation(defaultShaderProgram.shaderProgram, "brightness");
+    TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg");
+    simpleShader.ConfigureAttributes();
 
     float timeValue, sineWavValue;
     while (windowShouldStayOpen()) {
@@ -67,15 +65,15 @@ int main() {
         timeValue = glfwGetTime();
         sineWavValue = sin(timeValue)+1;
         
-        glUniform1f(brightnessMultiplier, sineWavValue);
-        
+        simpleShader.UseShader();
+        simpleShader.SetFloatVariable("brightness", sineWavValue);
+                
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         window.swapBuffersAndCheckForEvents();
     }
 
     // Clean up/free memory:
-    glDeleteTextures(1, &textureObjectHandle);
     glDeleteBuffers(1, &elementBufferObjectHanle);
     glDeleteBuffers(1, &vertexBufferObjectHandle);
     glDeleteVertexArrays(1, &vertexArrayObjectHandle);
