@@ -15,16 +15,18 @@
 #include <glm/glm.hpp>
 
 class WindowManager {
-
-
 public:
     GLFWwindow* window;
+
     int initialize(const char* windowName, int width, int height);
+    
     bool windowShouldClose();
     bool windowEspaceKeyHit();
     bool windowKeyHit(int glfwKey);
+    
     void swapBuffersAndCheckForEvents();
     void clearCurrentBuffer();
+
     static void windowResizeCallback(GLFWwindow * window, int width, int height);
 };
 

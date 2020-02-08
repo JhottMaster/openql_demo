@@ -64,6 +64,19 @@ int main() {
 
     float timeValue, sineWavValue;
 
+    // Model matrix:
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f)); 
+
+    // View matrix:
+    glm::mat4 view = glm::mat4(1.0f);
+    // note that we're translating the scene in the reverse direction of where we want to move
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); 
+
+    // Projection matrix:
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(45.0f), 1024.0f / 768.0f, 0.1f, 100.0f);
+
     while (windowShouldStayOpen()) {
         window.clearCurrentBuffer();
         
@@ -80,8 +93,14 @@ int main() {
         trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
         trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
-        unsigned int transformLoc = glGetUniformLocation(simpleShader.shaderProgram, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+        int modelLoc = glGetUniformLocation(simpleShader.shaderProgram, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        int viewLoc = glGetUniformLocation(simpleShader.shaderProgram, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+        int projectionLoc = glGetUniformLocation(simpleShader.shaderProgram, "projection");
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
