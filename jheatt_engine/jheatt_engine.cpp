@@ -4,6 +4,7 @@
 #include "lib/file_utils.hpp"
 #include "lib/shader_util.hpp"
 #include "lib/shader_program.hpp"
+#include "lib/shader.hpp"
 
 using namespace glm;
 
