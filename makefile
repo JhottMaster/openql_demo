@@ -14,7 +14,7 @@ unix: build_unix
 	@echo "Creating output dirs..."
 	rm -r $(OUT_DIR)/shaders
 	cp -u -r $(SRC_DIR)/shaders $(OUT_DIR)/shaders
-	cp -u -r $(SRC_DIR)/resources $(OUT_DIR)/resources
+	cp -u -r -a $(SRC_DIR)/resources $(OUT_DIR)/resources
 	@echo "Finished! Running:"
 	cd $(OUT_DIR)/; ./$(EXEC_NAME)
 

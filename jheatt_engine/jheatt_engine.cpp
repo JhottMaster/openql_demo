@@ -39,9 +39,9 @@ int main() {
     float vertices[] = {
         //  Position       Color               Texcoords
         //  X      Y       R     G     B       U     V
-            -0.5f, 0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f, // Top-left
-            0.5f,  0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // Top-right
-            0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f, // Bottom-right
+            -0.5f, 0.5f,   1.0f, 0.5f, 0.5f,   0.0f, 0.0f, // Top-left
+            0.5f,  0.5f,   0.5f, 1.0f, 0.5f,   1.0f, 0.0f, // Top-right
+            0.5f, -0.5f,   0.5f, 0.5f, 1.0f,   1.0f, 1.0f, // Bottom-right
             -0.5f,-0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // Bottom-left
     };
 
@@ -56,6 +56,7 @@ int main() {
     GLuint elementBufferObjectHanle = ShaderUtil::CreateAndBindElementBufferObject(1, vertixTriangleIndex, sizeof(vertixTriangleIndex));
 
     TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg");
+    TextureObject faceTexture = TextureObject("resources/images/awesomeface.png", 1);
     simpleShader.ConfigureAttributes();
 
     float timeValue, sineWavValue;
@@ -63,10 +64,13 @@ int main() {
         window.clearCurrentBuffer();
         
         timeValue = glfwGetTime();
-        sineWavValue = sin(timeValue)+1;
+        sineWavValue = sin(timeValue);
         
-        simpleShader.UseShader();
-        simpleShader.SetFloatVariable("brightness", sineWavValue);
+        simpleShader.UseShader(); // Activate shader before setting uniforms
+        simpleShader.SetFloatVariable("swap_amount", sineWavValue);
+
+        simpleShader.SetIntVariable("tex", 0); // or with shader class
+        simpleShader.SetIntVariable("tex2", 1); // or with shader class
                 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

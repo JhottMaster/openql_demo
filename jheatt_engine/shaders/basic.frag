@@ -6,9 +6,10 @@ in vec2 Texcoord;
 out vec4 outColor;
 
 uniform sampler2D tex;
-uniform float brightness;
+uniform sampler2D tex2;
+uniform float swap_amount;
 
 void main()
 {
-    outColor = (texture(tex, Texcoord) * vec4(Color, 1.0)) * brightness;
+    outColor = mix(texture(tex, Texcoord), texture(tex2, Texcoord), swap_amount);
 }
