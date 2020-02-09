@@ -1,15 +1,28 @@
 #include "mesh.hpp"
 
+float* Mesh::vertexList() { return vertices; }
+GLuint* Mesh::indexList() { return vertex_triangle_indeces; }
+int Mesh::indexCount() { return number_of_indexes; }
+int Mesh::vertexCount() { return number_of_vertices; }
+
+int Mesh::sizeOfVertices() {
+  return sizeof(float) * number_of_vertices; 
+}
+
+int Mesh::sizeOfIndex() {
+  return sizeof(GLuint) * number_of_indexes; 
+}
+
 Mesh Mesh::Plane(float length, float width) {
   Mesh msh;
   msh.number_of_vertices = 8 * 4;
   msh.vertices = new float[msh.number_of_vertices] {
       //  Position       Color               Texcoords
       //  X    Y    Z      R     G     B       U     V
-      -0.5f, 0.5f, 0.0f,   1.0f, 0.5f, 0.5f,   0.0f, 0.0f, // Top-left
-      0.5f,  0.5f, 0.0f,   0.5f, 1.0f, 0.5f,   1.0f, 0.0f, // Top-right
-      0.5f, -0.5f, 0.0f,   0.5f, 0.5f, 1.0f,   1.0f, 1.0f, // Bottom-right
-      -0.5f,-0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // Bottom-left
+      -length, 0.0f, width,   1.0f, 0.5f, 0.5f,   0.0f, 0.0f, // Top-left
+      length, 0.0f, width,   0.5f, 1.0f, 0.5f,   1.0f, 0.0f, // Top-right
+      length, 0.0f,-width,   0.5f, 0.5f, 1.0f,   1.0f, 1.0f, // Bottom-right
+      -length, 0.0f,-width,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // Bottom-left
     };
 
   // Create mappings of which vertex index are which points on triangles and bind to element buffer:
@@ -24,50 +37,52 @@ Mesh Mesh::Plane(float length, float width) {
 Mesh Mesh::Cube(float size) {
   Mesh msh;
   msh.number_of_vertices = 8 * 6 * 6;
+
+  size /= 2; // Must divide by 2 since size is from center
   msh.vertices = new float[msh.number_of_vertices] {
       //  Position       Color               Texcoords
       //  X    Y      Z      R     G     B      U     V
-      -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      size, -size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      -size,  size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
 
-      -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      size, -size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      -size,  size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
 
-      -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      -size,  size,  size,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      -size,  size, -size,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      -size,  size,  size,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
 
-      0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      size, -size, -size,   1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      size, -size, -size,   1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      size, -size,  size,   1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
 
-      -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      -0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      size, -size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      size, -size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      size, -size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
 
-      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f , 1.0f, 1.0f, 1.0f , 0.0f, 1.0f
+      -size,  size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      -size,  size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      -size,  size, -size , 1.0f, 1.0f, 1.0f , 0.0f, 1.0f
     };
 
   // Create mappings of which vertex index are which points on triangles and bind to element buffer:
@@ -83,10 +98,3 @@ Mesh Mesh::Cube(float size) {
   return msh;
 }
 
-int Mesh::sizeOfVertices() {
-  return sizeof(float) * number_of_vertices; 
-}
-
-int Mesh::sizeOfIndex() {
-  return sizeof(GLuint) * number_of_indexes; 
-}

@@ -5,13 +5,16 @@
 
 class Mesh {
 private:
-    
-
-public:
     int number_of_vertices;
     int number_of_indexes;
     float* vertices;
-    GLuint* vertex_triangle_indeces;
+    GLuint* vertex_triangle_indeces; 
+
+public:
+    int vertexCount();
+    int indexCount();
+    float* vertexList();
+    GLuint* indexList();
     
     int sizeOfVertices();
     int sizeOfIndex();
