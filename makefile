@@ -1,7 +1,7 @@
 # Cross-platform compilation:
 CC=g++ # Uses clang in OSX
 LNK_FLAGS=-lGLEW -lglfw -lSOIL
-OSX_LNK_FLAGS=-framework OpenGL -framework CoreFoundation
+OSX_LNK_FLAGS=-framework OpenGL -framework CoreFoundation -std=c++11
 NIX_LNK_FLAGS=-Wall -lGL
 LIB_HEADER_DIR=./additional_includes/
 
