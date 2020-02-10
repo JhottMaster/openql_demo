@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "mesh.hpp"
 
 Camera::Camera(WindowManager * window, Engine * engine) {
   _engine = engine;
@@ -27,6 +28,10 @@ void Camera::windowManagerResized() {
 void Camera::Draw() {
   glViewport(XPos, YPos, Width, Height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  for (Mesh* currentMesh: _engine->Meshes) {
+    currentMesh->Render();
+  }
 }
 
 Camera::~Camera() {

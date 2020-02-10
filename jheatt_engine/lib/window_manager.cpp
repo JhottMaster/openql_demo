@@ -85,3 +85,8 @@ void WindowManager::swapBuffersAndCheckForEvents() {
 void WindowManager::clearCurrentBuffer() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
+WindowManager::~WindowManager() {
+    Cameras.clear();
+    Cameras.shrink_to_fit();
+}

@@ -39,11 +39,12 @@ int main() {
     */
     GLuint vertexArrayObjectHandle = ShaderUtil::CreateAndBindVertexArray(1);
 
-    Mesh cubeModel = Mesh::Cube(1);
+    Mesh* cubeModel = Mesh::Cube(1);
+    engine->Meshes.push_back(cubeModel);
 
     // Create our vertex buffer on GPU and copy our vertex array to it:
-    GLuint vertexBufferObjectHandle = ShaderUtil::CreateAndBindVertexBufferObject(1, cubeModel.vertexList(), cubeModel.sizeOfVertices());
-    GLuint elementBufferObjectHanle = ShaderUtil::CreateAndBindElementBufferObject(1, cubeModel.indexList(), cubeModel.sizeOfIndex());
+    GLuint vertexBufferObjectHandle = ShaderUtil::CreateAndBindVertexBufferObject(1, cubeModel->vertexList(), cubeModel->sizeOfVertices());
+    GLuint elementBufferObjectHanle = ShaderUtil::CreateAndBindElementBufferObject(1, cubeModel->indexList(), cubeModel->sizeOfIndex());
 
     TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg");
     TextureObject faceTexture = TextureObject("resources/images/awesomeface.png", 1);
@@ -114,7 +115,7 @@ int main() {
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                     
             //glDrawElements(GL_TRIANGLES, cubeModel.indexCount(), GL_UNSIGNED_INT, 0);
-            glDrawArrays(GL_TRIANGLES, 0, cubeModel.vertexCount());
+            glDrawArrays(GL_TRIANGLES, 0, cubeModel->vertexCount());
         }
         
 

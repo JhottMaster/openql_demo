@@ -44,6 +44,8 @@ public:
     Camera* CreateCamera(int width = 0, int height = 0, int x = 0, int y = 0, float fov = 45.0f);
 
     static void windowResizeCallback(GLFWwindow * window, int width, int height);
+
+    ~WindowManager();
 };
 
 #endif 

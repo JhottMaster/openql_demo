@@ -3,6 +3,9 @@
 
 #include "window_manager.hpp"
 
+#include <algorithm>
+#include <iterator>
+
 class Mesh {
 private:
     int number_of_vertices;
@@ -18,8 +21,10 @@ public:
     
     int sizeOfVertices();
     int sizeOfIndex();
-    static Mesh Plane(float length, float width);
-    static Mesh Cube(float size);
+    static Mesh* Plane(float length, float width);
+    static Mesh* Cube(float size);
+
+    void Render();
 };
 
 #endif 
