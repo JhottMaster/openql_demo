@@ -24,7 +24,7 @@ public:
     static Mesh* Plane(float length, float width);
     static Mesh* Cube(float size);
 
-    void Render();
+    void DrawMesh();
 };
 
 #endif 

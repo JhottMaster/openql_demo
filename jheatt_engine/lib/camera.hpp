@@ -3,6 +3,7 @@
 
 #include "window_manager.hpp"
 
+class Shader;
 class Engine;
 class WindowManager;
 
@@ -16,12 +17,14 @@ public:
   bool AdjustToWindowDynamically;
   float FieldOfView;
   int Width, Height, XPos, YPos;
+  glm::vec3 Position;
+  glm::vec3 Rotation;
 
   Camera(WindowManager * window, Engine * engine);
 
   void Initialize(int width = 0, int height = 0, int x = 0, int y = 0, float fov = 45.0f);
   void windowManagerResized();
-  void Draw();
+  void Draw(Shader* shader);
 
   ~Camera();
 };

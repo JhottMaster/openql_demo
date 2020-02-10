@@ -28,8 +28,8 @@ WindowManager* Engine::FindWindowManager(GLFWwindow * window) {
 }
 
 Engine::~Engine() {
-  Meshes.clear();
-  Meshes.shrink_to_fit();
+  Entities.clear();
+  Entities.shrink_to_fit();
 
   _windows.clear();
   _windows.shrink_to_fit();

@@ -5,7 +5,7 @@
 #include "window_manager.hpp"
 
 class WindowManager;
-class Mesh;
+class Entity;
 
 class Engine {
 private:
@@ -18,7 +18,7 @@ private:
   
 public:
   static Engine* GetOrCreateInstance(); // How we get our singleton engine
-  std::vector<Mesh *> Meshes;
+  std::vector<Entity *> Entities;
 
   WindowManager* CreateWindow(const char* windowName = "Jheatt Engine", int width = 1024, int height = 768);
   WindowManager* FindWindowManager(GLFWwindow * window);

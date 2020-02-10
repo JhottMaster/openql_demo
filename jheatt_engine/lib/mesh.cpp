@@ -14,8 +14,7 @@ int Mesh::sizeOfIndex() {
   return sizeof(GLuint) * number_of_indexes; 
 }
 
-void Mesh::Render() {
-  return; // For now, don't do the drawing here.
+void Mesh::DrawMesh() {
   //glDrawElements(GL_TRIANGLES, cubeModel.indexCount(), GL_UNSIGNED_INT, 0);
   glDrawArrays(GL_TRIANGLES, 0, vertexCount());
 }
