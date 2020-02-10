@@ -20,7 +20,7 @@ WindowManager* window = engine->CreateWindow();
 
 int main() {
     Camera* camera = window->CreateCamera();
-    camera->Position = glm::vec3(0.0f, 0.0f, -3.0f);
+    camera->Position = glm::vec3(0.0f, 0.0f, -6.0f);
 
     // Setup shaders:
     Shader simpleShader("basic", "basic");
