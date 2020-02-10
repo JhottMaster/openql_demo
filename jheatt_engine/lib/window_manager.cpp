@@ -53,7 +53,6 @@ Camera* WindowManager::CreateCamera(int width, int height, int x, int y, float f
 
 void WindowManager::windowResizeCallback(GLFWwindow * window, int width, int height) {
     Engine* engine = Engine::GetOrCreateInstance();
-    printf("Requesting a search for GLFW window at address: %p\n", (void*)&window);
     WindowManager* currentManger = engine->FindWindowManager(window);
     if (currentManger == nullptr) return;
 
