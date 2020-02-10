@@ -1,8 +1,7 @@
 #define GLEW_STATIC
 
-#include "lib/window_manager.hpp"
-#include "lib/file_utils.hpp"
-#include "lib/shader_util.hpp"
+#include "lib/engine.hpp"
+#include "lib/camera.hpp"
 #include "lib/shader.hpp"
 #include "lib/texture_object.hpp"
 #include "lib/mesh.hpp"
@@ -15,11 +14,12 @@ using namespace glm;
 // Declarations
 bool windowShouldStayOpen();
 
-WindowManager window;
+Engine* engine = Engine::GetOrCreateInstance();
+WindowManager* window = engine->CreateWindow();
 
 int main() {
-    window.initialize("Open GL Demo", 1024, 768);
-    
+    Camera* camera = window->CreateCamera();
+
     // Setup shaders:
     Shader simpleShader("basic", "basic");
     if (simpleShader.compilationFailed) {
@@ -84,7 +84,8 @@ int main() {
     };
 
     while (windowShouldStayOpen()) {
-        window.clearCurrentBuffer();
+        //window.clearCurrentBuffer();
+        camera->Draw();
         
         timeValue = glfwGetTime();
         sineWavValue = sin(timeValue);
@@ -117,7 +118,7 @@ int main() {
         }
         
 
-        window.swapBuffersAndCheckForEvents();
+        window->swapBuffersAndCheckForEvents();
     }
 
     // Clean up/free memory:
@@ -130,7 +131,7 @@ int main() {
 
 // Check if the ESC key was pressed or the window was closed
 bool windowShouldStayOpen() {
-    if (window.windowEspaceKeyHit()) return false;
-    if (window.windowShouldClose()) return false;
+    if (window->windowEspaceKeyHit()) return false;
+    if (window->windowShouldClose()) return false;
     return true;
 }

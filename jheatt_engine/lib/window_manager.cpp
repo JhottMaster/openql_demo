@@ -1,5 +1,9 @@
 #include "window_manager.hpp"
 
+WindowManager::WindowManager(Engine* engine) {
+    _engine = engine;
+}
+
 int WindowManager::initialize(const char* windowName, int width, int height) {
     // Setting this boolean is necessary to force GLEW to use a modern 
     // OpenGL method for checking if a function is available- it's also
@@ -18,16 +22,15 @@ int WindowManager::initialize(const char* windowName, int width, int height) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL 
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow(width, height, windowName, NULL, NULL);
-    if (window == NULL) {
+    windowHandle = glfwCreateWindow(width, height, windowName, NULL, NULL);
+    if (windowHandle == NULL) {
         fprintf(stderr, "Failed to open GLFW window.\n");
         glfwTerminate();
         return -1;
     }
 
-    glfwMakeContextCurrent(window); // Initialize GLEW
-    glViewport(0, 0, width, height);
-    glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)&WindowManager::windowResizeCallback);  
+    glfwMakeContextCurrent(windowHandle); // Initialize GLEW
+    glfwSetFramebufferSizeCallback(windowHandle, (GLFWframebuffersizefun)&WindowManager::windowResizeCallback);  
 
     if (glewInit() != GLEW_OK) {
         fprintf(stderr, "Failed to initialize GLEW\n");
@@ -35,14 +38,32 @@ int WindowManager::initialize(const char* windowName, int width, int height) {
     }
 
     // Ensure we can capture the escape key being pressed below
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetInputMode(windowHandle, GLFW_STICKY_KEYS, GL_TRUE);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
     return 0;
 }
 
+Camera* WindowManager::CreateCamera(int width, int height, int x, int y, float fov) {
+    Camera* new_camera = new Camera(this, _engine);
+    Cameras.push_back(new_camera) ;
+    new_camera->Initialize(width, height, x, y, fov);
+    return new_camera;
+}
+
 void WindowManager::windowResizeCallback(GLFWwindow * window, int width, int height) {
-    glViewport(0, 0, width, height);
+    Engine* engine = Engine::GetOrCreateInstance();
+    printf("Requesting a search for GLFW window at address: %p\n", (void*)&window);
+    WindowManager* currentManger = engine->FindWindowManager(window);
+    if (currentManger == nullptr) return;
+
+    currentManger->Width = width;
+    currentManger->Height = height;
+    currentManger->SendWindowManagerResizedMessage();
+}
+
+void WindowManager::SendWindowManagerResizedMessage() {
+    for (Camera* currentCamera: Cameras) currentCamera->windowManagerResized();
 }
 
 bool WindowManager::windowEspaceKeyHit() {
@@ -50,15 +71,15 @@ bool WindowManager::windowEspaceKeyHit() {
 }
 
 bool WindowManager::windowKeyHit(int glfwKey) {
-    return (glfwGetKey(window, glfwKey) == GLFW_PRESS);
+    return (glfwGetKey(windowHandle, glfwKey) == GLFW_PRESS);
 }
 
 bool WindowManager::windowShouldClose() {
-    return (glfwWindowShouldClose(window) != 0);
+    return (glfwWindowShouldClose(windowHandle) != 0);
 }
 
 void WindowManager::swapBuffersAndCheckForEvents() {
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(windowHandle);
     glfwPollEvents();
 }
 
