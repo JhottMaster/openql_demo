@@ -3,7 +3,6 @@
 
 #include "engine.hpp"
 
-class Shader;
 class Engine;
 class WindowManager;
 
@@ -41,7 +40,7 @@ public:
 
   void Initialize(int width = 0, int height = 0, int x = 0, int y = 0, float fov = 45.0f);
   void windowManagerResized();
-  void Draw(Shader* shader);
+  void Draw();
 
   ~Camera();
 };

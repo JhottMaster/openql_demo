@@ -16,8 +16,9 @@ public:
     glm::vec3 Position;
     glm::vec3 Rotation;
 
+    Shader* MeshShader();
     Entity(Mesh* mesh);
-    void Render(Shader* simpleShader);
+    void Render();
     
     ~Entity();
 };

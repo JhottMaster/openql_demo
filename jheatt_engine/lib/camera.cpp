@@ -120,15 +120,19 @@ void Camera::CalculateShowcaseCameraMovement(glm::vec3 center) {
   _view_matrix = glm::lookAt(Position, center, cameraUp);  
 }
 
-void Camera::Draw(Shader* shader) {
+void Camera::Draw() {
   glViewport(XPos, YPos, Width, Height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  shader->SetFloatMatrixVariable("view", _view_matrix);
-  shader->SetFloatMatrixVariable("projection", _projection_matrix);
-
+  Shader* current_shader = nullptr;
   for (Entity* currentEntity: _engine->Entities) {
-    currentEntity->Render(shader);
+    if (current_shader != currentEntity->MeshShader()) {
+      current_shader = currentEntity->MeshShader();
+      current_shader->UseShader(); 
+      current_shader->SetFloatMatrixVariable("view", _view_matrix);
+      current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
+    }
+    currentEntity->Render();
   }
 }
 

@@ -14,13 +14,43 @@ int Mesh::sizeOfIndex() {
   return sizeof(GLuint) * number_of_indexes; 
 }
 
-void Mesh::DrawMesh() {
-  //glDrawElements(GL_TRIANGLES, cubeModel.indexCount(), GL_UNSIGNED_INT, 0);
-  glDrawArrays(GL_TRIANGLES, 0, vertexCount());
+Mesh::Mesh(Shader* shader) {
+  MeshShader = shader;
+  glGenVertexArrays(1, &vertex_array_object_handle);
 }
 
-Mesh* Mesh::Plane(float length, float width) {
-  Mesh* msh = new Mesh();
+void Mesh::Initialize() {
+  if (initialized) return;
+  glBindVertexArray(vertex_array_object_handle);
+
+  // Create our vertex buffer on GPU and copy our vertex array to it:
+  glGenBuffers(1, &vertex_buffer_object_handle); // Create device and assign to handle
+  // Let's make it the active object so we can do stuff with it:
+  glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_object_handle);
+  glBufferData(GL_ARRAY_BUFFER, sizeOfVertices(), vertexList(), GL_STATIC_DRAW);
+
+  // Create an element array
+  glGenBuffers(1, &element_buffer_object_hanle);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_object_hanle);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeOfIndex(), indexList(), GL_STATIC_DRAW);
+
+  // Configure usage of this shader:
+  MeshShader->ConfigureAttributes();
+
+  glBindVertexArray(0);
+  initialized = true;
+}
+
+void Mesh::DrawMesh() {
+  if (!initialized) Initialize();
+  glBindVertexArray(vertex_array_object_handle);
+  //glDrawElements(GL_TRIANGLES, cubeModel.indexCount(), GL_UNSIGNED_INT, 0);
+  glDrawArrays(GL_TRIANGLES, 0, vertexCount());
+  glBindVertexArray(0);
+}
+
+Mesh* Mesh::Plane(Shader* shader, float length, float width) {
+  Mesh* msh = new Mesh(shader);
   msh->number_of_vertices = 8 * 4;
   msh->vertices = new float[msh->number_of_vertices];
   float temp[] = {
@@ -46,8 +76,8 @@ Mesh* Mesh::Plane(float length, float width) {
   return msh;
 }
 
-Mesh* Mesh::Cube(float size) {
-  Mesh* msh = new Mesh();
+Mesh* Mesh::Cube(Shader* shader, float size) {
+  Mesh* msh = new Mesh(shader);
   msh->number_of_vertices = 8 * 6 * 6;
 
   size /= 2; // Must divide by 2 since size is from center
@@ -119,4 +149,8 @@ Mesh* Mesh::Cube(float size) {
 Mesh::~Mesh() {
   if (vertices != nullptr) delete[] vertices;
   if (vertex_triangle_indeces != nullptr) delete[] vertex_triangle_indeces;
+
+  glDeleteBuffers(1, &element_buffer_object_hanle);
+  glDeleteBuffers(1, &vertex_buffer_object_handle);
+  glDeleteVertexArrays(1, &vertex_array_object_handle);
 }

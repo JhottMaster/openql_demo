@@ -18,34 +18,21 @@ int main() {
     Camera* camera = window->CreateCamera();
     camera->Position = glm::vec3(0.0f, 0.0f, 6.0f);
 
-    // Setup shaders:
+    // Setup shaders, mesh, & textures:
     Shader simpleShader("basic", "basic");
     if (simpleShader.compilationFailed) {
         printf("\nLast Error:\n%s\n", simpleShader.lastErrorCallStack);
         return 1;
     }
 
-    /*
-    A VAO that stores our vertex attribute configuration and which VBO to use. 
-    Usually when we have multiple objects we want to draw, we first generate/
-    configure all the VAOs (and thus the required VBO and attribute pointers) 
-    and store those for later use. The moment we want to draw one of our objects,
-    we take the corresponding VAO, bind it, then draw the object and unbind the 
-    VAO again - in this case here I create the only VAO and immidiately bind to it:
-
-    Create a vertex array object to store all the configuration on how to draw.
-    */
-    GLuint vertexArrayObjectHandle = ShaderUtil::CreateAndBindVertexArray(1);
-
-    Mesh* cubeModel = Mesh::Cube(1);
-    // Create our vertex buffer on GPU and copy our vertex array to it:
-    GLuint vertexBufferObjectHandle = ShaderUtil::CreateAndBindVertexBufferObject(1, cubeModel->vertexList(), cubeModel->sizeOfVertices());
-    GLuint elementBufferObjectHanle = ShaderUtil::CreateAndBindElementBufferObject(1, cubeModel->indexList(), cubeModel->sizeOfIndex());
-    
+    Mesh* cubeModel = Mesh::Cube(&simpleShader);
     TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg");
     TextureObject faceTexture = TextureObject("resources/images/awesomeface.png", 1);
-    simpleShader.ConfigureAttributes();
+    simpleShader.UseShader(); // Activate shader before setting uniforms
+    simpleShader.SetIntVariable("tex", 0);
+    simpleShader.SetIntVariable("tex2", 1);
 
+    // Build a bunch of cubes at various positions:
     glm::vec3 cubePositions[] = {
         glm::vec3( 0.0f,  0.0f,  0.0f), 
         glm::vec3( 2.0f,  5.0f, -15.0f), 
@@ -65,14 +52,9 @@ int main() {
         engine.Entities.push_back(cubeEntity);
     }
 
+    // Enable depth testing so we write faces correctly:    
     glEnable(GL_DEPTH_TEST);
 
-    // Activate shader before setting uniforms
-    simpleShader.UseShader(); 
-
-    simpleShader.SetIntVariable("tex", 0);
-    simpleShader.SetIntVariable("tex2", 1);
-    
     float timeValue, sineWavValue;
     while (windowShouldStayOpen(window)) {
         window->CalculateDeltaTime();
@@ -92,16 +74,11 @@ int main() {
         }
         
         // Draw the camera scene:
-        camera->Draw(&simpleShader);
+        camera->Draw();
         
         // Swap buffer
         window->swapBuffersAndCheckForEvents();
     }
-
-    // Clean up/free memory:
-    glDeleteBuffers(1, &elementBufferObjectHanle);
-    glDeleteBuffers(1, &vertexBufferObjectHandle);
-    glDeleteVertexArrays(1, &vertexArrayObjectHandle);
 
     // Cleans up/frees all memory used by the engine:
     engine.Shutdown();
