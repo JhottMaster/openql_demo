@@ -40,6 +40,7 @@ int WindowManager::initialize(const char* windowName, int width, int height) {
     // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(windowHandle, GLFW_STICKY_KEYS, GL_TRUE);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    lastFrame = glfwGetTime();
 
     return 0;
 }
@@ -61,16 +62,32 @@ void WindowManager::windowResizeCallback(GLFWwindow * window, int width, int hei
     currentManger->SendWindowManagerResizedMessage();
 }
 
+void WindowManager::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    Engine* engine = Engine::GetOrCreateInstance();
+    WindowManager* currentManger = engine->FindWindowManager(window);
+    if (currentManger == nullptr) return;
+
+    currentManger->MouseXPosition = xpos;
+    currentManger->MouseYPosition = ypos;
+}
+
 void WindowManager::SendWindowManagerResizedMessage() {
     for (Camera* currentCamera: Cameras) currentCamera->windowManagerResized();
 }
 
-bool WindowManager::windowEspaceKeyHit() {
-    return windowKeyHit(GLFW_KEY_ESCAPE);
+void WindowManager::CaptureAndUseMouse() {
+    if (_mouse_captured) return;
+    glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(windowHandle, WindowManager::mouseCallback);  
+    _mouse_captured = true;
 }
 
-bool WindowManager::windowKeyHit(int glfwKey) {
-    return (glfwGetKey(windowHandle, glfwKey) == GLFW_PRESS);
+bool WindowManager::keyPressed(int key) {
+    return (glfwGetKey(windowHandle, key) == GLFW_PRESS);
+}
+
+bool WindowManager::keyReleased(int key) {
+    return (glfwGetKey(windowHandle, key) == GLFW_RELEASE);
 }
 
 bool WindowManager::windowShouldClose() {
@@ -79,7 +96,14 @@ bool WindowManager::windowShouldClose() {
 
 void WindowManager::swapBuffersAndCheckForEvents() {
     glfwSwapBuffers(windowHandle);
-    glfwPollEvents();
+    glfwPollEvents();  
+}
+
+void WindowManager::CalculateDeltaTime() {
+    double currentFrame = glfwGetTime();
+    DeltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame; 
+    //DeltaTime = (float) 0.1f;
 }
 
 void WindowManager::clearCurrentBuffer() {

@@ -39,19 +39,72 @@ void Camera::windowManagerResized() {
   RecalculateProjectionMatrix();
 }
 
+void Camera::CalculateBasicCameraMovement() {
+  _window->CaptureAndUseMouse();
+
+  float xoffset = _window->MouseXPosition - _last_mouse_x;
+  // Reversed since y-coordinates range from bottom to top:
+  float yoffset = _last_mouse_y - _window->MouseYPosition;
+  _last_mouse_x = _window->MouseXPosition;
+  _last_mouse_y = _window->MouseYPosition;
+
+  const float sensitivity = 0.05f;
+  xoffset *= sensitivity;
+  yoffset *= sensitivity;
+
+  Rotation.y += xoffset;
+  Rotation.z += yoffset;
+
+  if(Rotation.z > 89.0f) Rotation.z = 89.0f;
+  if(Rotation.z < -89.0f) Rotation.z = -89.0f;
+
+  glm::vec3 direction;
+  direction.x = cos(glm::radians(Rotation.y)) * cos(glm::radians(Rotation.z));
+  direction.y = sin(glm::radians(Rotation.z));
+  direction.z = sin(glm::radians(Rotation.y)) * cos(glm::radians(Rotation.z));
+  glm::vec3 cameraFront = glm::normalize(direction);
+
+
+  // glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
+  glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+
+  if (_window->keyPressed(GLFW_KEY_W))
+    Position += CameraSpeed * cameraFront * (float)_window->DeltaTime;
+  if (_window->keyPressed(GLFW_KEY_S))
+    Position -= CameraSpeed * cameraFront * (float)_window->DeltaTime;
+  if (_window->keyPressed(GLFW_KEY_A))
+    Position -= glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * (float)_window->DeltaTime;
+  if (_window->keyPressed(GLFW_KEY_D))
+    Position += glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * (float)_window->DeltaTime;
+
+  _view_matrix = glm::lookAt(Position, Position + cameraFront, cameraUp); 
+}
+
+void Camera::CalculateShowcaseCameraMovement(glm::vec3 center) {
+  glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f,  0.0f);
+
+  if (_window->keyPressed(GLFW_KEY_W))
+    ShowcaseRadius -= CameraSpeed * _window->DeltaTime;
+  if (_window->keyPressed(GLFW_KEY_S))
+    ShowcaseRadius += CameraSpeed * _window->DeltaTime;
+  if (_window->keyPressed(GLFW_KEY_A))
+    ShowcaseAngle -= CameraSpeed * 25.0f * _window->DeltaTime;
+  if (_window->keyPressed(GLFW_KEY_D))
+    ShowcaseAngle += CameraSpeed * 25.0f * _window->DeltaTime;
+
+  float camX = sin(glm::radians(ShowcaseAngle)) * ShowcaseRadius;
+  float camZ = cos(glm::radians(ShowcaseAngle)) * ShowcaseRadius;
+  Position = glm::vec3(camX,  0.0f,  camZ);
+
+  _view_matrix = glm::lookAt(Position, center, cameraUp);  
+}
+
+
 void Camera::Draw(Shader* shader) {
   glViewport(XPos, YPos, Width, Height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // View matrix:
-  // (note that we're translating the scene in the reverse direction of where we want to move)
-  glm::mat4 view = glm::mat4(1.0f);
-  view = glm::translate(view, Position); 
-  view = glm::rotate(view, glm::radians(Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-  view = glm::rotate(view, glm::radians(Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-  view = glm::rotate(view, glm::radians(Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-  shader->SetFloatMatrixVariable("view", view);
+  shader->SetFloatMatrixVariable("view", _view_matrix);
   shader->SetFloatMatrixVariable("projection", _projection_matrix);
 
   for (Entity* currentEntity: _engine->Entities) {

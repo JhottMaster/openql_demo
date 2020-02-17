@@ -67,12 +67,15 @@ int main() {
 
     // Activate shader before setting uniforms
     simpleShader.UseShader(); 
-    
+
     simpleShader.SetIntVariable("tex", 0);
     simpleShader.SetIntVariable("tex2", 1);
     
     float timeValue, sineWavValue;
     while (windowShouldStayOpen(window)) {
+        window->CalculateDeltaTime();
+        camera->CalculateBasicCameraMovement();
+
         timeValue = glfwGetTime();
         sineWavValue = sin(timeValue);
         simpleShader.SetFloatVariable("swap_amount", sineWavValue);
@@ -80,14 +83,14 @@ int main() {
         // Rotate each cube at different rates:
         for(unsigned int i = 0; i < 10; i++) {
             Entity* cubeEntity = engine.Entities[i];
-            float angle = (i+1) * sineWavValue;
+            float angle = (i+1) * sineWavValue * 0.1f;
             cubeEntity->Rotation = glm::vec3(angle*50, angle*30, angle*75);
         }
         
         // Draw the camera scene:
         camera->Draw(&simpleShader);
 
-        // Swap buffer:
+        // Swap buffer
         window->swapBuffersAndCheckForEvents();
     }
 
@@ -103,7 +106,7 @@ int main() {
 
 // Check if the ESC key was pressed or the window was closed
 bool windowShouldStayOpen(WindowManager* window) {
-    if (window->windowEspaceKeyHit()) return false;
+    if (window->keyPressed(GLFW_KEY_ESCAPE)) return false;
     if (window->windowShouldClose()) return false;
     return true;
 }
