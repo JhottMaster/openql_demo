@@ -131,11 +131,17 @@ void Camera::Draw() {
     if (current_shader != currentEntity->MeshShader()) {
       current_shader = currentEntity->MeshShader();
       current_shader->UseShader(); 
-      current_shader->SetVec3Variable("ambientLightColor", AmbientLight);
-      if (light) current_shader->SetVec3Variable("lightColor", light->LightColor);
       current_shader->SetFloatMatrixVariable("view", _view_matrix);
       current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
+      current_shader->SetVec3Variable("ambientLightColor", AmbientLight);
+      if (light) {
+        current_shader->SetFloatVariable("lightRadius", light->LightRadius);
+        current_shader->SetVec3Variable("lightColor", light->LightColor);
+        current_shader->SetVec3Variable("lightPos", light->Position);
+      }
     }
+
+    
     currentEntity->Render();
   }
 
@@ -144,9 +150,9 @@ void Camera::Draw() {
     if (current_shader != currentLightEntity->MeshShader()) {
       current_shader = currentLightEntity->MeshShader();
       current_shader->UseShader(); 
-      current_shader->SetVec3Variable("lightColor", light->LightColor);    
       current_shader->SetFloatMatrixVariable("view", _view_matrix);
       current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
+      current_shader->SetVec3Variable("lightColor", light->LightColor);    
     }
     currentLightEntity->Render();
   }

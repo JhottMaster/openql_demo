@@ -49,11 +49,11 @@ void Shader::ConfigureAttributes() {
 	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 	glEnableVertexAttribArray(positionAttribute);
 
-	// Get the position of the "color" argument in vertex shader:
-	GLint colorAttribute = glGetAttribLocation(shaderProgram, "color");
-	// Describe the input type for colorAttribute (color position in vertices array)
-	glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(colorAttribute);
+	// Get the position of the "normal" argument in vertex shader:
+	GLint normalAttribute = glGetAttribLocation(shaderProgram, "normal");
+	// Describe the input type for normalAttribute (normal position in vertices array)
+	glVertexAttribPointer(normalAttribute, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(normalAttribute);
 
 	// Get the position of the "texcoord" argument in vertex shader:
 	GLint textureAttribute = glGetAttribLocation(shaderProgram, "texcoord");

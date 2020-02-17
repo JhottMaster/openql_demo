@@ -22,6 +22,7 @@ public:
     glm::vec3 Position = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    float LightRadius = 15.0f;
 
     Shader* MeshShader();
     Entity(Mesh* mesh);

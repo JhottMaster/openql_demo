@@ -83,50 +83,51 @@ Mesh* Mesh::Cube(Shader* shader, float size) {
   size /= 2; // Must divide by 2 since size is from center
   msh->vertices = new float[msh->number_of_vertices];
   float temp[] = {
-      //  Position       Color               Texcoords
-      //  X    Y      Z      R     G     B      U     V
-      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      size, -size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      -size,  size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      //  Position          Normal Data           Texcoords
+      //  X    Y      Z                            U     V
+      -size, -size, -size,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
+      size, -size, -size,   0.0f, 0.0f, -1.0f,  1.0f, 0.0f,
+      size,  size, -size,   0.0f, 0.0f, -1.0f,  1.0f, 1.0f,
+      size,  size, -size,   0.0f, 0.0f, -1.0f,  1.0f, 1.0f,
+      -size,  size, -size,  0.0f, 0.0f, -1.0f,  0.0f, 1.0f,
+      -size, -size, -size,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
 
-      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      size, -size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      -size,  size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+      -size, -size,  size,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+      size, -size,  size,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+      size,  size,  size,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+      size,  size,  size,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+      -size,  size,  size,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
+      -size, -size,  size,  0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
 
-      -size,  size,  size,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      -size,  size, -size,  1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      -size,  size,  size,  1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      -size,  size,  size,  -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
+      -size,  size, -size,  -1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+      -size, -size, -size,  -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+      -size, -size, -size,  -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+      -size, -size,  size,  -1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+      -size,  size,  size,  -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
 
-      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      size, -size, -size,   1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      size, -size, -size,   1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      size, -size,  size,   1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+      size,  size,  size,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+      size,  size, -size,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+      size, -size, -size,   1.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+      size, -size, -size,   1.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+      size, -size,  size,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+      size,  size,  size,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
 
-      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      size, -size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      size, -size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      size, -size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      -size, -size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      -size, -size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+      -size, -size, -size,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f,
+      size, -size, -size,   0.0f, -1.0f, 0.0f,  1.0f, 1.0f,
+      size, -size,  size,   0.0f, -1.0f, 0.0f,  1.0f, 0.0f,
+      size, -size,  size,   0.0f, -1.0f, 0.0f,  1.0f, 0.0f,
+      -size, -size,  size,  0.0f, -1.0f, 0.0f,  0.0f, 0.0f,
+      -size, -size, -size,  0.0f, -1.0f, 0.0f,  0.0f, 1.0f,
 
-      -size,  size, -size,  1.0f, 1.0f, 1.0f,  0.0f, 1.0f,
-      size,  size, -size,   1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
-      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      size,  size,  size,   1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
-      -size,  size,  size,  1.0f, 1.0f, 1.0f,  0.0f, 0.0f,
-      -size,  size, -size , 1.0f, 1.0f, 1.0f , 0.0f, 1.0f
+      -size,  size, -size,  0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+      size,  size, -size,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
+      size,  size,  size,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+      size,  size,  size,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+      -size,  size,  size,  0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
+      -size,  size, -size , 0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
     };
+
   std::copy(temp, temp + msh->number_of_vertices, msh->vertices);
 
   // Create mappings of which vertex index are which points on triangles and bind to element buffer:

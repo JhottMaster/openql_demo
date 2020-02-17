@@ -17,7 +17,8 @@ int main() {
 
     Camera* camera = window->CreateCamera();
     camera->Position = glm::vec3(0.0f, 0.0f, 6.0f);
-    camera->AmbientLight = glm::vec3(0.1f, 0.1f, 0.1f);
+    camera->AmbientLight = glm::vec3(0.2f, 0.2f, 0.2f);
+    camera->BackgroundColor = camera->AmbientLight;
 
     // Light shader:
     Shader lightSourceShader("light_source", "light_source");
@@ -81,11 +82,20 @@ int main() {
 
         // Rotate each cube at different rates:
         for(unsigned int i = 0; i < 10; i++) {
+            if (i < 5) continue; // Move only half the cubes
             Entity* cubeEntity = engine.Entities[i];
             float angle = (i+1) * sineWavValue * 0.1f;
             cubeEntity->Rotation = glm::vec3(angle*50, angle*30, angle*75);
         }
         
+        // Change light position:
+        OmniLight->Position.z = sineWavValue * 2.0f;
+        OmniLight->Position.y = -sineWavValue * 2.0f;
+        OmniLight->Position.x = cos(timeValue) * 2.0f;
+
+        // Change light color
+        OmniLight->LightColor.g = sineWavValue;
+
         // Draw the camera scene:
         camera->Draw();
         
