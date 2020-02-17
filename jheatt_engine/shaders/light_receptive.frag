@@ -7,8 +7,10 @@ out vec4 outColor;
 
 uniform sampler2D tex;
 uniform vec3 lightColor;
+uniform vec3 ambientLightColor;
 
 void main()
 {
-    outColor =  texture(tex, Texcoord) * vec4(lightColor, 1.0);
+    vec4 lightingEffect = vec4(lightColor, 1.0) + vec4(ambientLightColor, 1.0f);
+    outColor =  texture(tex, Texcoord) * lightingEffect;
 }

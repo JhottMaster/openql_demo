@@ -17,6 +17,7 @@ int main() {
 
     Camera* camera = window->CreateCamera();
     camera->Position = glm::vec3(0.0f, 0.0f, 6.0f);
+    camera->AmbientLight = glm::vec3(0.1f, 0.1f, 0.1f);
 
     // Light shader:
     Shader lightSourceShader("light_source", "light_source");
