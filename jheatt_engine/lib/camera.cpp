@@ -9,7 +9,7 @@ Camera::Camera(WindowManager * window, Engine * engine) {
 }
 
 void Camera::Initialize(int width, int height, int x, int y, float fov) {
-  glfwGetWindowSize(_window->windowHandle, &initWindowManagerWidth, &initWindowManagerHeight);
+  glfwGetFramebufferSize(_window->windowHandle, &initWindowManagerWidth, &initWindowManagerHeight);
   width == 0 ? Width = initWindowManagerWidth : Width = width;
   height == 0 ? Height = initWindowManagerHeight : Width = height;
   
