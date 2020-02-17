@@ -120,7 +120,6 @@ void Camera::CalculateShowcaseCameraMovement(glm::vec3 center) {
   _view_matrix = glm::lookAt(Position, center, cameraUp);  
 }
 
-
 void Camera::Draw(Shader* shader) {
   glViewport(XPos, YPos, Width, Height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

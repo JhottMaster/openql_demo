@@ -2,12 +2,14 @@
 
 #include "lib/engine.hpp"
 #include "lib/texture_object.hpp"
+#include <iomanip>
 
 using namespace glm;
 
 
 // Declarations
 bool windowShouldStayOpen(WindowManager* window);
+void SetTitle(WindowManager* window, Camera* cam);
 
 int main() {
     Engine& engine = *Engine::GetOrCreateInstance();
@@ -76,6 +78,7 @@ int main() {
         window->CalculateDeltaTime();
         camera->CalculateBasicCameraMovement();
         camera->CalculateScrollZoom();
+        SetTitle(window, camera);
 
         timeValue = glfwGetTime();
         sineWavValue = sin(timeValue);
@@ -90,7 +93,7 @@ int main() {
         
         // Draw the camera scene:
         camera->Draw(&simpleShader);
-
+        
         // Swap buffer
         window->swapBuffersAndCheckForEvents();
     }
@@ -110,4 +113,25 @@ bool windowShouldStayOpen(WindowManager* window) {
     if (window->keyPressed(GLFW_KEY_ESCAPE)) return false;
     if (window->windowShouldClose()) return false;
     return true;
+}
+
+void AddVectorToStringStream(std::stringstream& fmt, glm::vec3 vect, bool position = true) {
+    fmt << (position ? " X: " : " Roll: ");
+    fmt << std::setprecision(3) << vect.x;
+    fmt << (position ? ", Y: " : ", Yaw: ");
+    fmt << std::setprecision(3) << vect.y;
+    fmt << (position ? ", Z: " : ", Pitch: ");
+    fmt << std::setprecision(3) << vect.z;
+}
+
+double last_title_set_time = 0;
+void SetTitle(WindowManager* window, Camera* cam) {
+    if ((glfwGetTime() - last_title_set_time) < 0.05) return;
+    last_title_set_time = glfwGetTime();
+
+    std::stringstream fmt;
+    fmt << "Camera";
+    AddVectorToStringStream(fmt, cam->Position);
+    AddVectorToStringStream(fmt, cam->Rotation, false);
+    window->SetTitle(fmt.str());
 }

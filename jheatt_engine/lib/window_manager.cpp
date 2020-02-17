@@ -53,6 +53,10 @@ Camera* WindowManager::CreateCamera(int width, int height, int x, int y, float f
     return new_camera;
 }
 
+void WindowManager::SetTitle(const std::string &title) {
+    glfwSetWindowTitle(windowHandle, title.c_str());
+}
+
 void WindowManager::windowResizeCallback(GLFWwindow * window, int width, int height) {
     Engine* engine = Engine::GetOrCreateInstance();
     WindowManager* currentManger = engine->FindWindowManager(window);

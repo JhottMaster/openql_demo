@@ -36,6 +36,7 @@ public:
     double mouseXScroll();
     double mouseYScroll();
     
+    void SetTitle(const std::string &title);
     void swapBuffersAndCheckForEvents();
     void clearCurrentBuffer();
     void SendWindowManagerResizedMessage();
@@ -43,7 +44,7 @@ public:
     void CaptureAndUseMouse();
     Camera* CreateCamera(int width = 0, int height = 0, int x = 0, int y = 0, float fov = 45.0f);
 
-    static void windowResizeCallback(GLFWwindow * window, int width, int height);
+    static void windowResizeCallback(GLFWwindow* window, int width, int height);
     static void mousePositionCallback(GLFWwindow* window, double xpos, double ypos);
     static void mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
