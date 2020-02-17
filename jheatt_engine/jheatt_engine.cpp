@@ -75,6 +75,7 @@ int main() {
     while (windowShouldStayOpen(window)) {
         window->CalculateDeltaTime();
         camera->CalculateBasicCameraMovement();
+        camera->CalculateScrollZoom();
 
         timeValue = glfwGetTime();
         sineWavValue = sin(timeValue);

@@ -36,6 +36,7 @@ public:
   Camera(WindowManager * window, Engine * engine);
 
   void CalculateBasicCameraMovement();
+  void CalculateScrollZoom();
   void CalculateShowcaseCameraMovement(glm::vec3 center = glm::vec3(0.0, 0.0, 0.0));
 
   void Initialize(int width = 0, int height = 0, int x = 0, int y = 0, float fov = 45.0f);

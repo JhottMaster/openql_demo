@@ -83,6 +83,22 @@ void Camera::CalculateBasicCameraMovement() {
     Position += glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * (float)_window->DeltaTime;
 
   _view_matrix = glm::lookAt(Position, Position + cameraFront, cameraUp); 
+
+  
+}
+
+void Camera::CalculateScrollZoom() {
+  double mouse_y_scroll = _window->mouseYScroll();
+  if (mouse_y_scroll != 0) {
+    if(FieldOfView >= 1.0f && FieldOfView <= 50.0f)
+      FieldOfView -= mouse_y_scroll;
+    else if(FieldOfView <= 1.0f)
+      FieldOfView = 1.0f;
+    else if(FieldOfView >= 50.0f)
+      FieldOfView = 50.0f;
+
+    RecalculateProjectionMatrix();
+  }
 }
 
 void Camera::CalculateShowcaseCameraMovement(glm::vec3 center) {

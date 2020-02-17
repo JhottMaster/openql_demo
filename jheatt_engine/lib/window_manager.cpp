@@ -63,7 +63,7 @@ void WindowManager::windowResizeCallback(GLFWwindow * window, int width, int hei
     currentManger->SendWindowManagerResizedMessage();
 }
 
-void WindowManager::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+void WindowManager::mousePositionCallback(GLFWwindow* window, double xpos, double ypos) {
     Engine* engine = Engine::GetOrCreateInstance();
     WindowManager* currentManger = engine->FindWindowManager(window);
     if (currentManger == nullptr) return;
@@ -79,8 +79,30 @@ void WindowManager::SendWindowManagerResizedMessage() {
 void WindowManager::CaptureAndUseMouse() {
     if (_mouse_captured) return;
     glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPosCallback(windowHandle, WindowManager::mouseCallback);  
+    glfwSetCursorPosCallback(windowHandle, WindowManager::mousePositionCallback);  
+    glfwSetScrollCallback(windowHandle, mouseScrollCallback);
     _mouse_captured = true;
+}
+
+void WindowManager::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    Engine* engine = Engine::GetOrCreateInstance();
+    WindowManager* currentManger = engine->FindWindowManager(window);
+    if (currentManger == nullptr) return;
+
+    currentManger->_last_mouse_x_scroll = xoffset;
+    currentManger->_last_mouse_y_scroll = yoffset;
+}
+
+double WindowManager::mouseXScroll() {
+    double ret = _last_mouse_x_scroll;
+    _last_mouse_x_scroll = 0.0f;
+    return ret;
+}
+
+double WindowManager::mouseYScroll() {
+    double ret = _last_mouse_y_scroll;
+    _last_mouse_y_scroll = 0.0f;
+    return ret;
 }
 
 bool WindowManager::keyPressed(int key) {
