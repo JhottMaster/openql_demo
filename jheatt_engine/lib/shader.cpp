@@ -85,6 +85,11 @@ void Shader::SetFloatVariable(const std::string &name, float value) const
     glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), value); 
 } 
 
+void Shader::SetVec3Variable(const std::string &name, glm::vec3 &value) const
+{ 
+		glUniform3fv(glGetUniformLocation(shaderProgram, name.c_str()), 1, &value[0]); 
+} 
+
 void Shader::SetFloatMatrixVariable(const std::string &name, glm::mat4 value) const
 { 
 		int variableLocation = glGetUniformLocation(shaderProgram, name.c_str());

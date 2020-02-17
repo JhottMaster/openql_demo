@@ -122,17 +122,32 @@ void Camera::CalculateShowcaseCameraMovement(glm::vec3 center) {
 
 void Camera::Draw() {
   glViewport(XPos, YPos, Width, Height);
+  glClearColor(BackgroundColor.r, BackgroundColor.g, BackgroundColor.b, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  Entity* light = _engine->Lights.front();
   Shader* current_shader = nullptr;
   for (Entity* currentEntity: _engine->Entities) {
     if (current_shader != currentEntity->MeshShader()) {
       current_shader = currentEntity->MeshShader();
       current_shader->UseShader(); 
+      if (light) current_shader->SetVec3Variable("lightColor", light->LightColor);
       current_shader->SetFloatMatrixVariable("view", _view_matrix);
       current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
     }
     currentEntity->Render();
+  }
+
+  current_shader = nullptr;
+  for (Entity* currentLightEntity: _engine->Lights) {
+    if (current_shader != currentLightEntity->MeshShader()) {
+      current_shader = currentLightEntity->MeshShader();
+      current_shader->UseShader(); 
+      current_shader->SetVec3Variable("lightColor", light->LightColor);    
+      current_shader->SetFloatMatrixVariable("view", _view_matrix);
+      current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
+    }
+    currentLightEntity->Render();
   }
 }
 

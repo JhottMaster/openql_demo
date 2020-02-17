@@ -8,13 +8,20 @@
 class Shader;
 class Mesh;
 
+enum EntityType {
+    MESH,
+    LIGHT
+};
+
 class Entity {
 private:
     Mesh* _mesh;
 
 public:
-    glm::vec3 Position;
-    glm::vec3 Rotation;
+    EntityType Type = MESH;
+    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 
     Shader* MeshShader();
     Entity(Mesh* mesh);

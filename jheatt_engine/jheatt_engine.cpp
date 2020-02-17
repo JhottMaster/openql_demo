@@ -18,8 +18,16 @@ int main() {
     Camera* camera = window->CreateCamera();
     camera->Position = glm::vec3(0.0f, 0.0f, 6.0f);
 
+    // Light shader:
+    Shader lightSourceShader("light_source", "light_source");
+    if (lightSourceShader.compilationFailed) {
+        printf("\nLast Error:\n%s\n", lightSourceShader.lastErrorCallStack);
+        return 1;
+    }
+
     // Setup shaders, mesh, & textures:
-    Shader simpleShader("basic", "basic");
+    // Normally also uses "textured" fragment, but using "light_receptive" fragment shader to develop lighting support:
+    Shader simpleShader("textured", "light_receptive"); 
     if (simpleShader.compilationFailed) {
         printf("\nLast Error:\n%s\n", simpleShader.lastErrorCallStack);
         return 1;
@@ -51,6 +59,10 @@ int main() {
         cubeEntity->Position = cubePositions[i];
         engine.Entities.push_back(cubeEntity);
     }
+
+    Entity* OmniLight = engine.AddLight(&lightSourceShader);
+    OmniLight->Position = glm::vec3(0.0f, 0.0f, 3.0f);
+    OmniLight->LightColor = glm::vec3(1.0f, 0.5f, 0.75f);
 
     // Enable depth testing so we write faces correctly:    
     glEnable(GL_DEPTH_TEST);
