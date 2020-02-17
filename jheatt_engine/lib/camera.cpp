@@ -66,9 +66,9 @@ void Camera::CalculateBasicCameraMovement() {
   if(Rotation.z < -89.0f) Rotation.z = -89.0f;
 
   glm::vec3 direction;
-  direction.x = cos(glm::radians(Rotation.y)) * cos(glm::radians(Rotation.z));
+  direction.x = cos(glm::radians(Rotation.y - 90.0f)) * cos(glm::radians(Rotation.z));
   direction.y = sin(glm::radians(Rotation.z));
-  direction.z = sin(glm::radians(Rotation.y)) * cos(glm::radians(Rotation.z));
+  direction.z = sin(glm::radians(Rotation.y - 90.0f)) * cos(glm::radians(Rotation.z));
   
   glm::vec3 cameraFront = glm::normalize(direction);
   glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f,  0.0f);
