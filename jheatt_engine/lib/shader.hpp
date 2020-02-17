@@ -1,7 +1,8 @@
 #ifndef __SHADER_INCLUDED__
 #define __SHADER_INCLUDED__
 
-#include "shader_util.hpp"
+#include "engine.hpp"
+#include "file_utils.hpp"
 
 class Shader {
 private:

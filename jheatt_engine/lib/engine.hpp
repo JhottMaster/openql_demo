@@ -1,9 +1,29 @@
 #ifndef __ENGINE_INCLUDED__
 #define __ENGINE_INCLUDED__
 
+// Include standard headers
+#include <stdio.h>
+#include <stdlib.h>
 #include <vector>
-#include "window_manager.hpp"
+#include <algorithm>
+#include <iterator>
+#include <utility>
+
+// OpenGL related includes:
+#include <GL/glew.h> // Include GLEW. Always include it before gl.h and glfw3.h, since it's a bit magic.
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+
+// Ordered Engine Includes
+// First, include most basic building blocks:
+#include "shader_util.hpp"
+#include "shader.hpp"
 #include "mesh.hpp"
+
+// Now build out the entities that use them:
+#include "entity.hpp"
+#include "camera.hpp"
+#include "window_manager.hpp"
 
 class WindowManager;
 class Entity;

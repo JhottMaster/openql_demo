@@ -1,10 +1,7 @@
 #ifndef __MESH_INCLUDED__
 #define __MESH_INCLUDED__
 
-#include "window_manager.hpp"
-
-#include <algorithm>
-#include <iterator>
+#include "engine.hpp"
 
 class Mesh {
 private:

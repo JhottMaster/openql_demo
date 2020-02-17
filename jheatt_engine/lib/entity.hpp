@@ -1,12 +1,12 @@
 #ifndef __ENTITY_INCLUDED__
 #define __ENTITY_INCLUDED__
 
-#include "mesh.hpp"
-#include "shader.hpp"
-
+#include "engine.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <utility>
+
+class Shader;
+class Mesh;
 
 class Entity {
 private:

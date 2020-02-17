@@ -1,7 +1,7 @@
 #ifndef __CAMERA_INCLUDED__
 #define __CAMERA_INCLUDED__
 
-#include "window_manager.hpp"
+#include "engine.hpp"
 
 class Shader;
 class Engine;

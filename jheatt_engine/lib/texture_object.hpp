@@ -1,8 +1,7 @@
 #ifndef __TEXTURE_OBJECT_INCLUDED__
 #define __TEXTURE_OBJECT_INCLUDED__
 
-#include "window_manager.hpp"
-#include "file_utils.hpp"
+#include "engine.hpp"
 #include "SOIL/SOIL.h"
 
 class TextureObject {
