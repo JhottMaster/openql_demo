@@ -125,12 +125,23 @@ void AddVectorToStringStream(std::stringstream& fmt, glm::vec3 vect, bool positi
 }
 
 double last_title_set_time = 0;
+double run_count_last_update = 0;
+int run_count_per_sec = 0;
+int fps_counter = 0;
 void SetTitle(WindowManager* window, Camera* cam) {
-    if ((glfwGetTime() - last_title_set_time) < 0.05) return;
-    last_title_set_time = glfwGetTime();
+    run_count_per_sec++;
+    double current_time = glfwGetTime();
+    
+    if ((current_time - run_count_last_update) >= 1.0) {
+        run_count_last_update = current_time;
+        fps_counter = run_count_per_sec;
+        run_count_per_sec = 0;
+    }
+    if ((current_time - last_title_set_time) < 0.05) return;
+    last_title_set_time = current_time;
 
     std::stringstream fmt;
-    fmt << "Camera";
+    fmt << "FPS: " << fps_counter << "; Camera ";
     AddVectorToStringStream(fmt, cam->Position);
     AddVectorToStringStream(fmt, cam->Rotation, false);
     window->SetTitle(fmt.str());
