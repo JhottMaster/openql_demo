@@ -64,15 +64,26 @@ int main() {
     }
 
     glEnable(GL_DEPTH_TEST);
+
+    // Activate shader before setting uniforms
+    simpleShader.UseShader(); 
     
+    simpleShader.SetIntVariable("tex", 0);
+    simpleShader.SetIntVariable("tex2", 1);
+    
+    float timeValue, sineWavValue;
     while (windowShouldStayOpen(window)) {
+        timeValue = glfwGetTime();
+        sineWavValue = sin(timeValue);
+        simpleShader.SetFloatVariable("swap_amount", sineWavValue);
+
         // Rotate each cube at different rates:
         for(unsigned int i = 0; i < 10; i++) {
             Entity* cubeEntity = engine.Entities[i];
-            float angle = (i+1) * sin(glfwGetTime());
+            float angle = (i+1) * sineWavValue;
             cubeEntity->Rotation = glm::vec3(angle*50, angle*30, angle*75);
         }
-
+        
         // Draw the camera scene:
         camera->Draw(&simpleShader);
 

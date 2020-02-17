@@ -85,6 +85,12 @@ void Shader::SetFloatVariable(const std::string &name, float value) const
     glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), value); 
 } 
 
+void Shader::SetFloatMatrixVariable(const std::string &name, glm::mat4 value) const
+{ 
+		int variableLocation = glGetUniformLocation(shaderProgram, name.c_str());
+  	glUniformMatrix4fv(variableLocation, 1, GL_FALSE, glm::value_ptr(value));
+} 
+
 GLuint Shader::LoadShader(int shader_type, const char* shader_name) {
     // Create a vertex shader object on the device to store shader program:
     GLuint shader = glCreateShader(shader_type);

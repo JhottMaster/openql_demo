@@ -12,13 +12,20 @@ private:
   int initWindowManagerWidth, initWindowManagerHeight;
   Engine * _engine;
   WindowManager * _window;
+  glm::mat4 _projection_matrix;
+  void RecalculateProjectionMatrix();
 
 public:
-  bool AdjustToWindowDynamically;
-  float FieldOfView;
+  bool IsOrthographic = false;
+  bool AdjustToWindowDynamically = true;
+  float MaxClipDistance = 100.0f;
+  float MinClipDistance = 0.1f;
+  float FieldOfView = 45.0f;
+
   int Width, Height, XPos, YPos;
-  glm::vec3 Position;
-  glm::vec3 Rotation;
+
+  glm::vec3 Position = glm::vec3(0.0f, 0.0f, 0.0f);
+  glm::vec3 Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
   Camera(WindowManager * window, Engine * engine);
 

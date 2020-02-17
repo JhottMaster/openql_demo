@@ -18,6 +18,17 @@ void Camera::Initialize(int width, int height, int x, int y, float fov) {
   FieldOfView = fov;
   AdjustToWindowDynamically = true;
   glViewport(0, 0, width, height);
+  RecalculateProjectionMatrix();
+}
+
+void Camera::RecalculateProjectionMatrix() {
+  if(IsOrthographic) {
+    _projection_matrix = glm::ortho(0.0f, (float)Width, 0.0f, (float)Height, MinClipDistance, MaxClipDistance);
+  } else {
+    float fov = glm::radians(FieldOfView);
+    float aspectRatio = (float)Width / (float)Height;
+    _projection_matrix =  glm::perspective(fov, aspectRatio, MinClipDistance, MaxClipDistance);
+  }
 }
 
 void Camera::windowManagerResized() {
@@ -25,6 +36,7 @@ void Camera::windowManagerResized() {
 
   Width = _window->Width;
   Height = _window->Height;
+  RecalculateProjectionMatrix();
 }
 
 void Camera::Draw(Shader* shader) {
@@ -32,33 +44,15 @@ void Camera::Draw(Shader* shader) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // View matrix:
+  // (note that we're translating the scene in the reverse direction of where we want to move)
   glm::mat4 view = glm::mat4(1.0f);
-  // note that we're translating the scene in the reverse direction of where we want to move
   view = glm::translate(view, Position); 
+  view = glm::rotate(view, glm::radians(Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+  view = glm::rotate(view, glm::radians(Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+  view = glm::rotate(view, glm::radians(Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-  // Projection matrix:
-  glm::mat4 projection;
-  projection = glm::perspective(glm::radians(FieldOfView), (float)Width / (float)Height, 0.1f, 100.0f);
-
-  // Translation matrix:
-  glm::mat4 trans = glm::mat4(1.0f);
-  trans = glm::translate(trans, Position);
-
-  float timeValue = glfwGetTime();
-  float sineWavValue = sin(timeValue);
-  
-  shader->UseShader(); // Activate shader before setting uniforms
-  shader->SetFloatVariable("swap_amount", sineWavValue);
-
-  shader->SetIntVariable("tex", 0); // or with shader class
-  shader->SetIntVariable("tex2", 1); // or with shader class
-
-  int viewLoc = glGetUniformLocation(shader->shaderProgram, "view");
-  glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-  int projectionLoc = glGetUniformLocation(shader->shaderProgram, "projection");
-  glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
+  shader->SetFloatMatrixVariable("view", view);
+  shader->SetFloatMatrixVariable("projection", _projection_matrix);
 
   for (Entity* currentEntity: _engine->Entities) {
     currentEntity->Render(shader);

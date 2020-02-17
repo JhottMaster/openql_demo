@@ -29,6 +29,7 @@ public:
     void SetBoolVariable(const std::string &name, bool value) const;
     void SetIntVariable(const std::string &name, int value) const;
     void SetFloatVariable(const std::string &name, float value) const;
+    void SetFloatMatrixVariable(const std::string &name, glm::mat4 value) const;
 
     ~Shader();
 };
