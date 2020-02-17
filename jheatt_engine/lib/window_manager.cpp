@@ -29,8 +29,9 @@ int WindowManager::initialize(const char* windowName, int width, int height) {
         return -1;
     }
 
-    glfwMakeContextCurrent(windowHandle); // Initialize GLEW
     glfwSetFramebufferSizeCallback(windowHandle, (GLFWframebuffersizefun)&WindowManager::windowResizeCallback);  
+    glfwMakeContextCurrent(windowHandle); // Initialize GLEW
+    glfwGetFramebufferSize(windowHandle, &Width, &Height);
 
     if (glewInit() != GLEW_OK) {
         fprintf(stderr, "Failed to initialize GLEW\n");
