@@ -8,10 +8,10 @@
 
 class Mesh {
 private:
-    int number_of_vertices;
-    int number_of_indexes;
-    float* vertices;
-    GLuint* vertex_triangle_indeces; 
+    int number_of_vertices = 0;
+    int number_of_indexes = 0;
+    float* vertices = nullptr;
+    GLuint* vertex_triangle_indeces = nullptr; 
 
 public:
     int vertexCount();
@@ -25,6 +25,7 @@ public:
     static Mesh* Cube(float size);
 
     void DrawMesh();
+    ~Mesh();
 };
 
 #endif 

@@ -27,10 +27,17 @@ WindowManager* Engine::FindWindowManager(GLFWwindow * window) {
   return nullptr;
 }
 
+void Engine::Shutdown() {
+  delete Engine::singletonInstance;
+  Engine::singletonInstance = nullptr;
+}
+
 Engine::~Engine() {
+  for (Entity* entityPointer: Entities) delete entityPointer;
   Entities.clear();
   Entities.shrink_to_fit();
 
+  for (WindowManager* windowPointer: _windows) delete windowPointer;
   _windows.clear();
   _windows.shrink_to_fit();
 }

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "window_manager.hpp"
+#include "mesh.hpp"
 
 class WindowManager;
 class Entity;
@@ -21,8 +22,9 @@ public:
   std::vector<Entity *> Entities;
 
   WindowManager* CreateWindow(const char* windowName = "Jheatt Engine", int width = 1024, int height = 768);
-  WindowManager* FindWindowManager(GLFWwindow * window);
+  WindowManager* FindWindowManager(GLFWwindow* window);
 
+  void Shutdown();
   ~Engine();
 };
 

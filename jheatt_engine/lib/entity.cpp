@@ -16,3 +16,6 @@ void Entity::Render(Shader* simpleShader) {
           
   _mesh->DrawMesh();
 }
+
+Entity::~Entity() {
+}

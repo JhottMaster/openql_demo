@@ -6,6 +6,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <utility>
 
 class Entity {
 private:
@@ -17,6 +18,8 @@ public:
 
     Entity(Mesh* mesh);
     void Render(Shader* simpleShader);
+    
+    ~Entity();
 };
 
 #endif 

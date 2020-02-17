@@ -87,6 +87,7 @@ void WindowManager::clearCurrentBuffer() {
 }
 
 WindowManager::~WindowManager() {
+    for (Camera* cameraPointer: Cameras) delete cameraPointer;
     Cameras.clear();
     Cameras.shrink_to_fit();
 }

@@ -116,3 +116,7 @@ Mesh* Mesh::Cube(float size) {
   return msh;
 }
 
+Mesh::~Mesh() {
+  if (vertices != nullptr) delete[] vertices;
+  if (vertex_triangle_indeces != nullptr) delete[] vertex_triangle_indeces;
+}

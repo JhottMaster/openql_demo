@@ -31,7 +31,6 @@ void Camera::Draw(Shader* shader) {
   glViewport(XPos, YPos, Width, Height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
   // View matrix:
   glm::mat4 view = glm::mat4(1.0f);
   // note that we're translating the scene in the reverse direction of where we want to move
@@ -67,5 +66,4 @@ void Camera::Draw(Shader* shader) {
 }
 
 Camera::~Camera() {
-  
 }

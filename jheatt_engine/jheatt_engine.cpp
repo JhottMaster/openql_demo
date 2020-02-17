@@ -13,12 +13,12 @@ using namespace glm;
 
 
 // Declarations
-bool windowShouldStayOpen();
-
-Engine* engine = Engine::GetOrCreateInstance();
-WindowManager* window = engine->CreateWindow();
+bool windowShouldStayOpen(WindowManager* window);
 
 int main() {
+    Engine& engine = *Engine::GetOrCreateInstance();
+    WindowManager* window = engine.CreateWindow();
+
     Camera* camera = window->CreateCamera();
     camera->Position = glm::vec3(0.0f, 0.0f, -6.0f);
 
@@ -66,15 +66,15 @@ int main() {
     for(unsigned int i = 0; i < 10; i++) {
         Entity* cubeEntity = new Entity(cubeModel);
         cubeEntity->Position = cubePositions[i];
-        engine->Entities.push_back(cubeEntity);
+        engine.Entities.push_back(cubeEntity);
     }
 
     glEnable(GL_DEPTH_TEST);
     
-    while (windowShouldStayOpen()) {
+    while (windowShouldStayOpen(window)) {
         // Rotate each cube at different rates:
         for(unsigned int i = 0; i < 10; i++) {
-            Entity* cubeEntity = engine->Entities[i];
+            Entity* cubeEntity = engine.Entities[i];
             float angle = (i+1) * sin(glfwGetTime());
             cubeEntity->Rotation = glm::vec3(angle*50, angle*30, angle*75);
         }
@@ -91,11 +91,13 @@ int main() {
     glDeleteBuffers(1, &vertexBufferObjectHandle);
     glDeleteVertexArrays(1, &vertexArrayObjectHandle);
 
+    // Cleans up/frees all memory used by the engine:
+    engine.Shutdown();
     return 0;
 }
 
 // Check if the ESC key was pressed or the window was closed
-bool windowShouldStayOpen() {
+bool windowShouldStayOpen(WindowManager* window) {
     if (window->windowEspaceKeyHit()) return false;
     if (window->windowShouldClose()) return false;
     return true;
