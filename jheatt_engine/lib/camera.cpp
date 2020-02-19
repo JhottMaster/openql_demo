@@ -138,6 +138,7 @@ void Camera::Draw() {
         current_shader->SetFloatVariable("lightRadius", light->LightRadius);
         current_shader->SetVec3Variable("lightColor", light->LightColor);
         current_shader->SetVec3Variable("lightPos", light->Position);
+        current_shader->SetVec3Variable("viewPos", Position);
       }
     }
 

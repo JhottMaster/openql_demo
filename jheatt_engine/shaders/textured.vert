@@ -22,9 +22,9 @@ void main()
     calculate the normal matrix on the CPU and send it to the shaders via a uniform before
     drawing (just like the model matrix). 
     */
-    Normal =  mat3(transpose(inverse(model))) * normal;
+    Normal = mat3(transpose(inverse(model))) * normal;
     
-    
+
     Texcoord = texcoord;
 
     FragPos = vec3(model * vec4(position, 1.0));
