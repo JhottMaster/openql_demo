@@ -88,6 +88,12 @@ void WindowManager::CaptureAndUseMouse() {
     _mouse_captured = true;
 }
 
+void WindowManager::ReleaseMouse() {
+    if (!_mouse_captured) return;
+    glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    _mouse_captured = false;
+}
+
 void WindowManager::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
     Engine* engine = Engine::GetOrCreateInstance();
     WindowManager* currentManger = engine->FindWindowManager(window);

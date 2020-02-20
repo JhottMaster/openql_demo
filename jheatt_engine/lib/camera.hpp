@@ -18,6 +18,7 @@ private:
   void RecalculateProjectionMatrix();
 
 public:
+  bool UseMouseToPan = true;
   bool IsOrthographic = false;
   bool AdjustToWindowDynamically = true;
   float MaxClipDistance = 100.0f;

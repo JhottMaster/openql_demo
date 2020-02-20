@@ -40,30 +40,37 @@ void Camera::windowManagerResized() {
 }
 
 void Camera::CalculateBasicCameraMovement() {
-  _window->CaptureAndUseMouse();
 
-  if (_last_mouse_x == 0 && _last_mouse_y == 0) {
-    // Handle case when first loading application (jarring mouse jump)
+  if (UseMouseToPan) {
+    _window->CaptureAndUseMouse();
+
+    if (_last_mouse_x == 0 && _last_mouse_y == 0) {
+      // Handle case when first loading application (jarring mouse jump)
+      _last_mouse_x = _window->MouseXPosition;
+      _last_mouse_y = _window->MouseYPosition;
+    }
+    
+    float xoffset = _window->MouseXPosition - _last_mouse_x;
+    // Reversed since y-coordinates range from bottom to top:
+    float yoffset = _last_mouse_y - _window->MouseYPosition;
     _last_mouse_x = _window->MouseXPosition;
     _last_mouse_y = _window->MouseYPosition;
+
+    const float sensitivity = 0.05f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    Rotation.y += xoffset;
+    Rotation.z += yoffset;
+
+    // no "loops" when looking up or down:
+    if(Rotation.z > 89.0f) Rotation.z = 89.0f;
+    if(Rotation.z < -89.0f) Rotation.z = -89.0f;
+  } else {
+    _window->ReleaseMouse();
+    _last_mouse_x = 0;
+    _last_mouse_y = 0;
   }
-  
-  float xoffset = _window->MouseXPosition - _last_mouse_x;
-  // Reversed since y-coordinates range from bottom to top:
-  float yoffset = _last_mouse_y - _window->MouseYPosition;
-  _last_mouse_x = _window->MouseXPosition;
-  _last_mouse_y = _window->MouseYPosition;
-
-  const float sensitivity = 0.05f;
-  xoffset *= sensitivity;
-  yoffset *= sensitivity;
-
-  Rotation.y += xoffset;
-  Rotation.z += yoffset;
-
-  // no "loops" when looking up or down:
-  if(Rotation.z > 89.0f) Rotation.z = 89.0f;
-  if(Rotation.z < -89.0f) Rotation.z = -89.0f;
 
   glm::vec3 direction;
   direction.x = cos(glm::radians(Rotation.y - 90.0f)) * cos(glm::radians(Rotation.z));
@@ -82,9 +89,9 @@ void Camera::CalculateBasicCameraMovement() {
   if (_window->keyPressed(GLFW_KEY_D))
     Position += glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * (float)_window->DeltaTime;
 
-  _view_matrix = glm::lookAt(Position, Position + cameraFront, cameraUp); 
+  if (_window->keyPressed(GLFW_KEY_SPACE)) UseMouseToPan = !UseMouseToPan;
 
-  
+  _view_matrix = glm::lookAt(Position, Position + cameraFront, cameraUp); 
 }
 
 void Camera::CalculateScrollZoom() {
