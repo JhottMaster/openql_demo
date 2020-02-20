@@ -9,7 +9,14 @@ class Engine;
 class WindowManager {
 private:
     Engine* _engine;
-    double deltaTime = 0.0f;	// Time between current frame and last frame
+
+    // Helpers for tracking keyboard and mouse state:
+    int _last_key_pressed = 0;
+    double _last_key_press_time = 0.0;
+    int _last_mouse_button_pressed = -1;
+    double _last_mouse_button_press_time = 0.0;
+    
+    double deltaTime = 0.0f; // Time between current frame and last frame
     double lastFrame = 0.0f; // Time of last frame
     double _last_mouse_x_scroll = 0.0f;
     double _last_mouse_y_scroll = 0.0f;
@@ -31,8 +38,11 @@ public:
     bool windowShouldClose();
     bool windowEspaceKeyHit();
     bool windowKeyHit(int glfwKey);
+    bool mouseButtonPressRelease(int glfwMouseButton, double button_press_duration = 0.1f);
+    bool keyPressRelease(int glfwKey, double key_press_duration = 0.1f);
     bool keyPressed(int glfwKey);
     bool keyReleased(int glfwKey);
+    bool mouseButtonPressed(int glfwMouseButton);
     double mouseXScroll();
     double mouseYScroll();
     

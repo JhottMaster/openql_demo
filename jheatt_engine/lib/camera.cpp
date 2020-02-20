@@ -89,7 +89,7 @@ void Camera::CalculateBasicCameraMovement() {
   if (_window->keyPressed(GLFW_KEY_D))
     Position += glm::normalize(glm::cross(cameraFront, cameraUp)) * CameraSpeed * (float)_window->DeltaTime;
 
-  if (_window->keyPressed(GLFW_KEY_SPACE)) UseMouseToPan = !UseMouseToPan;
+  if (_window->mouseButtonPressRelease(GLFW_MOUSE_BUTTON_LEFT)) UseMouseToPan = !UseMouseToPan;
 
   _view_matrix = glm::lookAt(Position, Position + cameraFront, cameraUp); 
 }
@@ -140,16 +140,18 @@ void Camera::Draw() {
       current_shader->UseShader(); 
       current_shader->SetFloatMatrixVariable("view", _view_matrix);
       current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
-      current_shader->SetVec3Variable("ambientLightColor", AmbientLight);
+
+      current_shader->SetVec3Variable("ambient_light_color", AmbientLight);
+      current_shader->SetFloatVariable("material.shininess", 0.5f);
       if (light) {
-        current_shader->SetFloatVariable("lightRadius", light->LightRadius);
-        current_shader->SetVec3Variable("lightColor", light->LightColor);
-        current_shader->SetVec3Variable("lightPos", light->Position);
-        current_shader->SetVec3Variable("viewPos", Position);
+        current_shader->SetFloatVariable("light.radius", light->LightRadius);
+        current_shader->SetFloatVariable("light.attenuation", 10.0f);
+        current_shader->SetVec3Variable("light.color", light->LightColor);
+        current_shader->SetVec3Variable("light.position", light->Position);
+        current_shader->SetVec3Variable("light.view_position", Position);
       }
     }
 
-    
     currentEntity->Render();
   }
 

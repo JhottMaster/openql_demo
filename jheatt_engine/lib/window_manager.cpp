@@ -115,6 +115,38 @@ double WindowManager::mouseYScroll() {
     return ret;
 }
 
+bool WindowManager::mouseButtonPressRelease(int glfwMouseButton, double button_press_duration) {
+    if (glfwGetMouseButton(windowHandle, glfwMouseButton) == GLFW_PRESS) {
+        if (_last_mouse_button_pressed != glfwMouseButton) _last_mouse_button_press_time = glfwGetTime();
+        _last_mouse_button_pressed = glfwMouseButton;
+        return false;
+    }
+
+    if (_last_mouse_button_pressed == -1) return false;
+    if (glfwGetMouseButton(windowHandle, _last_mouse_button_pressed) != GLFW_RELEASE) return false;
+    if ((_last_mouse_button_press_time + button_press_duration) > glfwGetTime()) return false;
+    _last_mouse_button_pressed = -1;
+    return true;
+}
+
+bool WindowManager::mouseButtonPressed(int glfwMouseButton) {
+    return (glfwGetMouseButton(windowHandle, glfwMouseButton) == GLFW_PRESS);
+}
+
+bool WindowManager::keyPressRelease(int key, double key_press_duration) {
+    if (glfwGetKey(windowHandle, key) == GLFW_PRESS) {
+        if (_last_key_pressed != key) _last_key_press_time = glfwGetTime();
+        _last_key_pressed = key;
+        return false;
+    }
+
+    if (_last_key_pressed == 0) return false;
+    if (glfwGetKey(windowHandle, _last_key_pressed) != GLFW_RELEASE) return false;
+    if ((_last_key_press_time + key_press_duration) > glfwGetTime()) return false;
+    _last_key_pressed = 0;
+    return true;
+}
+
 bool WindowManager::keyPressed(int key) {
     return (glfwGetKey(windowHandle, key) == GLFW_PRESS);
 }

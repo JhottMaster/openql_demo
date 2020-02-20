@@ -37,10 +37,10 @@ int main() {
 
     Mesh* cubeModel = Mesh::Cube(&simpleShader);
     TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg");
-    TextureObject faceTexture = TextureObject("resources/images/awesomeface.png", 1);
+    TextureObject woodSpecular = TextureObject("resources/images/dark_wooden_crate_specular.jpg", 1);
     simpleShader.UseShader(); // Activate shader before setting uniforms
-    simpleShader.SetIntVariable("tex", 0);
-    simpleShader.SetIntVariable("tex2", 1);
+    simpleShader.SetIntVariable("material.diffuse_texture", 0);
+    simpleShader.SetIntVariable("material.specular_texture", 1);
 
     // Build a bunch of cubes at various positions:
     glm::vec3 cubePositions[] = {
@@ -69,14 +69,20 @@ int main() {
     // Enable depth testing so we write faces correctly:    
     glEnable(GL_DEPTH_TEST);
 
+    bool pause = false;
     float timeValue, sineWavValue;
     while (windowShouldStayOpen(window)) {
         window->CalculateDeltaTime();
+
+        // Handle pausing:
+        if (window->keyPressRelease(GLFW_KEY_SPACE, 0.05f)) pause = !pause;
+        if (pause) { glfwPollEvents(); continue; }
+        
         camera->CalculateBasicCameraMovement();
         camera->CalculateScrollZoom();
         SetTitle(window, camera);
-
-        timeValue = glfwGetTime();
+         
+        timeValue += window->DeltaTime;
         sineWavValue = sin(timeValue);
         simpleShader.SetFloatVariable("swap_amount", sineWavValue);
 
