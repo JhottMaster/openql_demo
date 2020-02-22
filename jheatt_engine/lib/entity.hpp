@@ -11,23 +11,32 @@ class Mesh;
 enum EntityLightType {
     NOT_A_LIGHT,
     OMNI_LIGHT,
-    DIRECTIONAL_LIGHT
+    DIRECTIONAL_LIGHT,
+    SPOT_LIGHT
 };
 
 class Entity {
 private:
     Mesh* _mesh;
+    EntityLightType _light_type = NOT_A_LIGHT;
+    void ValidateLight(std::string calling_method);
+    void CalculateLightConstants(float distance);
 
 public:
-    EntityLightType LightType = NOT_A_LIGHT;
-    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec2 LightConstants = glm::vec2(0.7, 1.8);
     glm::vec3 LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 LightDirection = glm::vec3(0.0f, -1.0f, 0.0f);
-    float LightRadius = 15.0f;
 
+    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    float LightRadius = 30.0f;
+
+    bool IsALight();
+    void SetLightType(EntityLightType type);
+    
+    EntityLightType LightType();
     Shader* MeshShader();
-    Entity(Mesh* mesh);
+    Entity(Mesh* mesh, EntityLightType = NOT_A_LIGHT);
     void Render();
     
     ~Entity();

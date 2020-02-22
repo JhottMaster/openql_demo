@@ -144,7 +144,9 @@ void Camera::Draw() {
       current_shader->SetVec3Variable("ambient_light_color", AmbientLight);
       current_shader->SetFloatVariable("material.shininess", 0.5f);
       if (light) {
-        current_shader->SetBoolVariable("light.is_directional", (light->LightType == DIRECTIONAL_LIGHT));
+        
+        current_shader->SetVec2Variable("light.constants", light->LightConstants);
+        current_shader->SetBoolVariable("light.is_directional", (light->LightType() == DIRECTIONAL_LIGHT));
         current_shader->SetFloatVariable("light.radius", light->LightRadius);
         current_shader->SetFloatVariable("light.attenuation", 10.0f);
         current_shader->SetVec3Variable("light.color", light->LightColor);

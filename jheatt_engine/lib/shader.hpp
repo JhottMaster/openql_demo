@@ -29,6 +29,7 @@ public:
     void SetBoolVariable(const std::string &name, bool value) const;
     void SetIntVariable(const std::string &name, int value) const;
     void SetFloatVariable(const std::string &name, float value) const;
+    void SetVec2Variable(const std::string &name, glm::vec2 &value) const;
     void SetVec3Variable(const std::string &name, glm::vec3 &value) const;
     void SetFloatMatrixVariable(const std::string &name, glm::mat4 value) const;
 

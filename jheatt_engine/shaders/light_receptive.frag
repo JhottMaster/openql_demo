@@ -15,6 +15,8 @@ uniform Material material;
 
 struct Light {
     bool is_directional;
+    vec2 constants;
+
     vec3 position;
     vec3 light_direction;
     vec3 view_position;
@@ -46,5 +48,11 @@ void main()
     float spec = pow(max(dot(viewDir, reflect(-lightDir, norm)), 0.0), 32);
     vec3 specular = material.shininess * spec * vec3(texture(material.specular_texture, Texcoord));
     
+    // Attenuation impact:
+    float distance = length(light.position - FragPos);
+    float attenuation = 1.0 / (1.0f + light.constants[0] * distance + light.constants[1] * (distance * distance));
+    diffuse *= attenuation;
+    specular *= attenuation;
+
     outColor = vec4(ambient + diffuse + specular, 1.0);   
 }
