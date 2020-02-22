@@ -15,10 +15,14 @@ uniform Material material;
 
 struct Light {
     bool is_directional;
+    bool is_spotlight;
     vec2 constants;
 
     vec3 position;
     vec3 light_direction;
+    float spotlight_cutoff;
+    float spotlight_inner_cutoff;
+
     vec3 view_position;
 
     vec3 color;
@@ -54,5 +58,16 @@ void main()
     diffuse *= attenuation;
     specular *= attenuation;
 
+    if (light.is_spotlight) {
+        // Everything outside the spotlight should be dark:
+        float theta = dot(lightDir, normalize(-light.light_direction));
+        float intensity = 0.0;
+        if(theta > light.spotlight_cutoff) {
+            float epsilon = light.spotlight_inner_cutoff - light.spotlight_cutoff;
+            intensity = clamp((theta - light.spotlight_cutoff) / epsilon, 0.0, 1.0);    
+        }
+        diffuse *= intensity;
+        specular *= intensity;
+    }
     outColor = vec4(ambient + diffuse + specular, 1.0);   
 }

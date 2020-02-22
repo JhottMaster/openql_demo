@@ -144,15 +144,27 @@ void Camera::Draw() {
       current_shader->SetVec3Variable("ambient_light_color", AmbientLight);
       current_shader->SetFloatVariable("material.shininess", 0.5f);
       if (light) {
-        
-        current_shader->SetVec2Variable("light.constants", light->LightConstants);
-        current_shader->SetBoolVariable("light.is_directional", (light->LightType() == DIRECTIONAL_LIGHT));
+        bool is_spot_light = (light->LightType() == SPOT_LIGHT);
+        bool is_directional_light = (light->LightType() == DIRECTIONAL_LIGHT);
+
+        if (is_spot_light) {
+          current_shader->SetBoolVariable("light.is_spotlight", is_spot_light);
+          current_shader->SetFloatVariable("light.spotlight_cutoff", glm::cos(glm::radians(light->SpotlightSpreadAngle)));
+          float inner_cutoff = glm::cos(glm::radians(light->SpotlightSpreadAngle * light->SpotlightHardness));
+          current_shader->SetFloatVariable("light.spotlight_inner_cutoff", inner_cutoff);
+          current_shader->SetVec3Variable("light.light_direction", light->LightDirection);
+        } else if (is_directional_light) {
+          current_shader->SetBoolVariable("light.is_directional", is_directional_light);
+          current_shader->SetVec3Variable("light.light_direction", light->LightDirection);
+        }
+       
+        current_shader->SetVec2Variable("light.constants", light->LightConstants);       
         current_shader->SetFloatVariable("light.radius", light->LightRadius);
         current_shader->SetFloatVariable("light.attenuation", 10.0f);
         current_shader->SetVec3Variable("light.color", light->LightColor);
         current_shader->SetVec3Variable("light.position", light->Position);
         current_shader->SetVec3Variable("light.view_position", Position);
-        current_shader->SetVec3Variable("light.light_direction", light->LightDirection);
+        
       }
     }
 

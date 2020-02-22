@@ -30,6 +30,8 @@ public:
     glm::vec3 Position = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
     float LightRadius = 30.0f;
+    float SpotlightSpreadAngle = 15.0f;
+    float SpotlightHardness = 0.85f;
 
     bool IsALight();
     void SetLightType(EntityLightType type);

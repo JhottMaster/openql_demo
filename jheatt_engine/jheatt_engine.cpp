@@ -18,7 +18,7 @@ int main() {
     Camera* camera = window->CreateCamera();
     camera->Position = glm::vec3(0.0f, 0.0f, 6.0f);
     camera->AmbientLight = glm::vec3(0.1f, 0.1f, 0.1f);
-    camera->BackgroundColor = camera->AmbientLight * 0.5f;
+    camera->BackgroundColor = camera->AmbientLight * 0.75f;
 
     // Light shader:
     Shader lightSourceShader("light_source", "light_source");
@@ -65,6 +65,8 @@ int main() {
     Entity* OmniLight = engine.AddLight(&lightSourceShader);
     OmniLight->Position = glm::vec3(0.0f, 0.0f, 3.0f);
     OmniLight->LightColor = glm::vec3(1.0f, 0.5f, 0.75f);
+    OmniLight->SetLightType(SPOT_LIGHT);
+    OmniLight->LightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
     // Enable depth testing so we write faces correctly:    
     glEnable(GL_DEPTH_TEST);
