@@ -15,7 +15,7 @@ Engine::Engine() {
 Entity* Engine::AddLight(Shader* lightShader) {
   if (lightMesh == nullptr) lightMesh = Mesh::Cube(lightShader, 0.1f);
   Entity* lightPointer = new Entity(lightMesh);
-  lightPointer->Type = LIGHT;
+  lightPointer->LightType = OMNI_LIGHT;
   Lights.push_back(lightPointer);
   return lightPointer;
 }

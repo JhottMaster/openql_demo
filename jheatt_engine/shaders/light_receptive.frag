@@ -14,7 +14,9 @@ struct Material {
 uniform Material material;
 
 struct Light {
+    bool is_directional;
     vec3 position;
+    vec3 light_direction;
     vec3 view_position;
 
     vec3 color;
@@ -30,7 +32,7 @@ void main()
 {
     // Precalculate fragment normal and light direction which we'll use for other calculations:
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(light.position - FragPos);  
+    vec3 lightDir = normalize(light.is_directional ? -light.light_direction : (light.position - FragPos));  
         
     // Calculate diffuse (color of material) lighting 
     vec3 texture_sample_color = vec3(texture(material.diffuse_texture, Texcoord));
