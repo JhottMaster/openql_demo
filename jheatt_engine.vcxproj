@@ -153,28 +153,50 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="jheatt_engine/jheatt_engine.cpp" />
-    <ClCompile Include="jheatt_engine/lib/file_utils.cpp" />
-    <ClCompile Include="jheatt_engine/lib/shader_program.cpp" />
-    <ClCompile Include="jheatt_engine/lib/shader_util.cpp" />
-    <ClCompile Include="jheatt_engine/lib/window_manager.cpp" />
+    <ClCompile Include="jheatt_engine\jheatt_engine.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\camera.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\engine.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\entity.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\file_utils.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\mesh.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\shader.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\shader_util.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\texture_object.cpp" xmlns="" />
+    <ClCompile Include="jheatt_engine\lib\window_manager.cpp" xmlns="" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="jheatt_engine/lib/file_utils.hpp" />
-    <ClInclude Include="jheatt_engine/lib/shader_program.hpp" />
-    <ClInclude Include="jheatt_engine/lib/shader_util.hpp" />
-    <ClInclude Include="jheatt_engine/lib/window_manager.hpp" />
+    <ClInclude Include="jheatt_engine\lib\camera.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\engine.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\entity.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\file_utils.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\mesh.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\shader.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\shader_util.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\texture_object.hpp" xmlns="" />
+    <ClInclude Include="jheatt_engine\lib\window_manager.hpp" xmlns="" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="jheatt_engine\shaders\2d_triangle.frag">
+    <None Include="jheatt_engine\shaders\light_receptive.frag" xmlns="">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="jheatt_engine\shaders\2d_triangle.vert">
+    <None Include="jheatt_engine\shaders\light_source.frag" xmlns="">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="jheatt_engine\shaders\textured.frag" xmlns="">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="jheatt_engine\shaders\light_source.vert" xmlns="">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="jheatt_engine\shaders\textured.vert" xmlns="">
       <DeploymentContent>true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="jheatt_engine\resources\images\dark_wooden_crate.jpg">
+    <Image Include="jheatt_engine\resources\images\dark_wooden_crate.jpg" xmlns="">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
+    <Image Include="jheatt_engine\resources\images\dark_wooden_crate_specular.jpg" xmlns="">
       <DeploymentContent>true</DeploymentContent>
     </Image>
   </ItemGroup>

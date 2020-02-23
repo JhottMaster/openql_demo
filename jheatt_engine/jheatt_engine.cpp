@@ -1,4 +1,4 @@
-#define GLEW_STATIC
+
 
 #include "lib/engine.hpp"
 #include "lib/texture_object.hpp"
@@ -70,7 +70,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     bool pause = false;
-    float timeValue, sineWavValue;
+    float timeValue = 0.0f, sineWavValue = 0.0f;
     while (windowShouldStayOpen(window)) {
         window->CalculateDeltaTime();
 

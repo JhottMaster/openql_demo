@@ -1,6 +1,8 @@
 #ifndef __ENGINE_INCLUDED__
 #define __ENGINE_INCLUDED__
 
+#define GLEW_STATIC
+
 // Include standard headers
 #include <stdio.h>
 #include <stdlib.h>
