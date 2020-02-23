@@ -119,11 +119,6 @@ int main() {
         DirectionalLight->Position.y = sineWavValue * 0.5f;
         DirectionalLight->Position.x = -cosWavValue * 0.5f;
 
-        // Change directional light color:
-        DirectionalLight->LightColor.r = sineWavValue;
-        DirectionalLight->LightColor.g = cosWavValue;
-        DirectionalLight->LightColor.b = sineWavValue;
-
         // Draw the camera scene:
         camera->Draw();
         

@@ -12,7 +12,7 @@ OUT_DIR=./build
 
 unix: build_unix
 	@echo "Creating output dirs..."
-	rm -r $(OUT_DIR)/shaders
+	rm -f -r $(OUT_DIR)/shaders
 	cp -u -r $(SRC_DIR)/shaders $(OUT_DIR)/shaders
 	cp -u -r -a $(SRC_DIR)/resources $(OUT_DIR)/resources
 	@echo "Finished! Running:"
