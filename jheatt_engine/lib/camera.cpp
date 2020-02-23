@@ -116,9 +116,9 @@ void Camera::CalculateShowcaseCameraMovement(glm::vec3 center) {
   if (_window->keyPressed(GLFW_KEY_S))
     ShowcaseRadius += CameraSpeed * _window->DeltaTime;
   if (_window->keyPressed(GLFW_KEY_A))
-    ShowcaseAngle -= CameraSpeed * 25.0f * _window->DeltaTime;
+    ShowcaseAngle -= CameraSpeed * (double)25.0f * _window->DeltaTime;
   if (_window->keyPressed(GLFW_KEY_D))
-    ShowcaseAngle += CameraSpeed * 25.0f * _window->DeltaTime;
+    ShowcaseAngle += CameraSpeed * (double)25.0f * _window->DeltaTime;
 
   float camX = sin(glm::radians(ShowcaseAngle)) * ShowcaseRadius;
   float camZ = cos(glm::radians(ShowcaseAngle)) * ShowcaseRadius;
@@ -146,38 +146,38 @@ void Camera::Draw() {
       current_shader->SetIntVariable("number_of_dynamic_lights", _engine->Lights.size());
       int currentIndex = 0;
       for (Entity* currentLight: _engine->Lights) {
-        char shaderVariableLocation[64];
+        char varNameBuffer[64];
 
         bool is_spot_light = (currentLight->LightType() == SPOT_LIGHT);
         bool is_directional_light = (currentLight->LightType() == DIRECTIONAL_LIGHT);
 
         if (is_spot_light) {
-          sprintf(shaderVariableLocation, "dynamic_lights[%i].is_spotlight", currentIndex);
-          current_shader->SetBoolVariable(shaderVariableLocation, is_spot_light);
-          sprintf(shaderVariableLocation, "dynamic_lights[%i].spotlight_cutoff", currentIndex);
-          current_shader->SetFloatVariable(shaderVariableLocation, glm::cos(glm::radians(currentLight->SpotlightSpreadAngle)));
+          snprintf(varNameBuffer, 64, "dynamic_lights[%i].is_spotlight", currentIndex);
+          current_shader->SetBoolVariable(varNameBuffer, is_spot_light);
+          snprintf(varNameBuffer, 64, "dynamic_lights[%i].spotlight_cutoff", currentIndex);
+          current_shader->SetFloatVariable(varNameBuffer, glm::cos(glm::radians(currentLight->SpotlightSpreadAngle)));
           float inner_cutoff = glm::cos(glm::radians(currentLight->SpotlightSpreadAngle * currentLight->SpotlightHardness));
-          sprintf(shaderVariableLocation, "dynamic_lights[%i].spotlight_inner_cutoff", currentIndex);
-          current_shader->SetFloatVariable(shaderVariableLocation, inner_cutoff);
-          sprintf(shaderVariableLocation, "dynamic_lights[%i].light_direction", currentIndex);
-          current_shader->SetVec3Variable(shaderVariableLocation, currentLight->LightDirection);
+          snprintf(varNameBuffer, 64, "dynamic_lights[%i].spotlight_inner_cutoff", currentIndex);
+          current_shader->SetFloatVariable(varNameBuffer, inner_cutoff);
+          snprintf(varNameBuffer, 64, "dynamic_lights[%i].light_direction", currentIndex);
+          current_shader->SetVec3Variable(varNameBuffer, currentLight->LightDirection);
         } else if (is_directional_light) {
-          sprintf(shaderVariableLocation, "dynamic_lights[%i].is_directional", currentIndex);
-          current_shader->SetBoolVariable(shaderVariableLocation, is_directional_light);
-          sprintf(shaderVariableLocation, "dynamic_lights[%i].light_direction", currentIndex);
-          current_shader->SetVec3Variable(shaderVariableLocation, currentLight->LightDirection);
+          snprintf(varNameBuffer, 64, "dynamic_lights[%i].is_directional", currentIndex);
+          current_shader->SetBoolVariable(varNameBuffer, is_directional_light);
+          snprintf(varNameBuffer, 64, "dynamic_lights[%i].light_direction", currentIndex);
+          current_shader->SetVec3Variable(varNameBuffer, currentLight->LightDirection);
         }
        
-        sprintf(shaderVariableLocation, "dynamic_lights[%i].constants", currentIndex);
-        current_shader->SetVec2Variable(shaderVariableLocation, currentLight->LightConstants);       
-        sprintf(shaderVariableLocation, "dynamic_lights[%i].radius", currentIndex);
-        current_shader->SetFloatVariable(shaderVariableLocation, currentLight->LightRadius);
-        sprintf(shaderVariableLocation, "dynamic_lights[%i].attenuation", currentIndex);
-        current_shader->SetFloatVariable(shaderVariableLocation, 10.0f);
-        sprintf(shaderVariableLocation, "dynamic_lights[%i].color", currentIndex);
-        current_shader->SetVec3Variable(shaderVariableLocation, currentLight->LightColor);
-        sprintf(shaderVariableLocation, "dynamic_lights[%i].position", currentIndex);
-        current_shader->SetVec3Variable(shaderVariableLocation, currentLight->Position);
+        snprintf(varNameBuffer, 64, "dynamic_lights[%i].constants", currentIndex);
+        current_shader->SetVec2Variable(varNameBuffer, currentLight->LightConstants);       
+        snprintf(varNameBuffer, 64, "dynamic_lights[%i].radius", currentIndex);
+        current_shader->SetFloatVariable(varNameBuffer, currentLight->LightRadius);
+        snprintf(varNameBuffer, 64, "dynamic_lights[%i].attenuation", currentIndex);
+        current_shader->SetFloatVariable(varNameBuffer, 10.0f);
+        snprintf(varNameBuffer, 64, "dynamic_lights[%i].color", currentIndex);
+        current_shader->SetVec3Variable(varNameBuffer, currentLight->LightColor);
+        snprintf(varNameBuffer, 64, "dynamic_lights[%i].position", currentIndex);
+        current_shader->SetVec3Variable(varNameBuffer, currentLight->Position);
 
         currentIndex++;
       }
