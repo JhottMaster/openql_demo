@@ -63,16 +63,22 @@ int main() {
     }
 
     Entity* OmniLight = engine.AddLight(&lightSourceShader);
-    OmniLight->Position = glm::vec3(0.0f, 0.0f, 3.0f);
-    OmniLight->LightColor = glm::vec3(1.0f, 0.5f, 0.75f);
-    OmniLight->SetLightType(SPOT_LIGHT);
-    OmniLight->LightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+    OmniLight->LightColor = glm::vec3(1.0f, 0.0f, 0.0f);
+    Entity* OmniLight2 = engine.AddLight(&lightSourceShader);
+    OmniLight2->LightColor = glm::vec3(0.0f, 1.0f, 0.0f);
+    Entity* OmniLight3 = engine.AddLight(&lightSourceShader);
+    OmniLight3->LightColor = glm::vec3(0.0f, 0.0f, 1.0f);
+
+    Entity* DirectionalLight = engine.AddLight(&lightSourceShader);
+    DirectionalLight->Position = glm::vec3(0.0f, 0.0f, 3.0f);
+    DirectionalLight->SetLightType(SPOT_LIGHT);
+    DirectionalLight->LightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
     // Enable depth testing so we write faces correctly:    
     glEnable(GL_DEPTH_TEST);
 
     bool pause = false;
-    float timeValue = 0.0f, sineWavValue = 0.0f;
+    float timeValue = 0.0f, sineWavValue = 0.0f, cosWavValue = 0.0f;
     while (windowShouldStayOpen(window)) {
         window->CalculateDeltaTime();
 
@@ -86,6 +92,7 @@ int main() {
          
         timeValue += window->DeltaTime;
         sineWavValue = sin(timeValue);
+        cosWavValue = cos(timeValue);
         simpleShader.SetFloatVariable("swap_amount", sineWavValue);
 
         // Rotate each cube at different rates:
@@ -96,13 +103,26 @@ int main() {
             cubeEntity->Rotation = glm::vec3(angle*50, angle*30, angle*75);
         }
         
-        // Change light position:
-        OmniLight->Position.z = sineWavValue * 2.0f;
-        OmniLight->Position.y = -sineWavValue * 2.0f;
-        OmniLight->Position.x = cos(timeValue) * 2.0f;
+        // Change light positions:
+        OmniLight->Position.z = sineWavValue * 3.0f;
+        OmniLight->Position.y = -sineWavValue * 3.0f;
+        OmniLight->Position.x = cosWavValue * 3.0f;
 
-        // Change light color
-        OmniLight->LightColor.g = sineWavValue;
+        OmniLight2->Position.z = sineWavValue * 2.5f;
+        OmniLight2->Position.y = sineWavValue * 2.5f;
+        OmniLight2->Position.x = -cosWavValue * 2.5f;
+
+        OmniLight3->Position.z = -sineWavValue * 3.5f;
+        OmniLight3->Position.y = sineWavValue * 3.5f;
+        OmniLight3->Position.x = cosWavValue * 3.5f;
+
+        DirectionalLight->Position.y = sineWavValue * 0.5f;
+        DirectionalLight->Position.x = -cosWavValue * 0.5f;
+
+        // Change directional light color:
+        DirectionalLight->LightColor.r = sineWavValue;
+        DirectionalLight->LightColor.g = cosWavValue;
+        DirectionalLight->LightColor.b = sineWavValue;
 
         // Draw the camera scene:
         camera->Draw();
