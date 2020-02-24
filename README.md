@@ -34,7 +34,7 @@ Build & run with `make unix`
 
 ## OSX Setup
 
-Was able to install most of the same libraries as Ubuntu using brew. (eg `brew install glew`). Note that on OSX `gcc` is replaced by Clang compiler, and infact `gcc` actually becomes an alias to it. On OSX linking to OpenGL is also a bit different- you must use `-framework OpenGL` to do so. See make file for more info. We also have a `-framework CoreFoundation` in order to support SOIL:
+Was able to install most of the same libraries as Ubuntu using brew. (eg `brew install glew`, `brew install assimp`). Note that on OSX `gcc` is replaced by Clang compiler, and infact `gcc` actually becomes an alias to it. On OSX linking to OpenGL is also a bit different- you must use `-framework OpenGL` to do so. See make file for more info. We also have a `-framework CoreFoundation` in order to support SOIL:
 
 As with Linux, you'll need to download SOIL: https://www.lonesock.net/soil.html - however, compiling for the latest versions of OSX is a bit different. Extract the download somewhere and go to `~/project/makefile` directory, open `makefile` and make the following change to the `CXX` variable: `CXX = gcc -arch i386 -arch x86_64`; _then_ run
 ```
