@@ -27,6 +27,11 @@
 #include "camera.hpp"
 #include "window_manager.hpp"
 
+// Assimp for loading various types of models:
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 class WindowManager;
 class Entity;
 class Mesh;
@@ -46,6 +51,7 @@ public:
   std::vector<Entity *> Entities;
   std::vector<Entity *> Lights;
 
+  void LoadModel(std::string path);
   WindowManager* CreateWindow(const char* windowName = "Jheatt Engine", int width = 1024, int height = 768);
   WindowManager* FindWindowManager(GLFWwindow* window);
   Entity* AddLight(Shader* lightShader);

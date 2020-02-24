@@ -1,11 +1,8 @@
-
-
 #include "lib/engine.hpp"
 #include "lib/texture_object.hpp"
 #include <iomanip>
 
 using namespace glm;
-
 
 // Declarations
 bool windowShouldStayOpen(WindowManager* window);
@@ -13,6 +10,9 @@ void SetTitle(WindowManager* window, Camera* cam);
 
 int main() {
     Engine& engine = *Engine::GetOrCreateInstance();
+
+    engine.LoadModel("resources/meshes/nanosuit/nanosuit.obj");
+
     WindowManager* window = engine.CreateWindow();
 
     Camera* camera = window->CreateCamera();

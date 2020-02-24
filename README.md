@@ -54,7 +54,7 @@ Right now this is only tested on Windows 10. To compile, you'll need to do the f
 **Using Visual Studio 2019**
 
 Just open the solution file. 
-The special configuratios is mostly in the creation of the `additional_includes` and `additional_libs` directories. GLM you can just download since it's only headers. But might need to build GLEW and SOIL (SOILD Repo: https://github.com/littlstar/soil )
+The special configuratios is mostly in the creation of the `additional_includes` and `additional_libs` directories. GLM you can just download since it's only headers. You'll probably need to build GLEW and SOIL (SOILD Repo: https://github.com/littlstar/soil ) assemblies and place them in `jheatt_engine\additional_libs\x86` if they are not already there. Likewise for Assimp, you'll need to clone the repository, built it **targeting Win32**, (You can do this using Cmake GUI for example) and then copy the `assimp\build\lib\Release\assimp-vc142-mt.lib` generated file to `jheatt_engine\additional_libs\x86` _as well as_ the `assimp\build\bin\Release\assimp-vc142-mt.dll` DLL to the directory where the executable will run (e.g. `jheatt_engine\build\Debug`)
 
 **Other (eg, using `make` or `cmake`)**
 
