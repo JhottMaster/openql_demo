@@ -15,6 +15,7 @@ Must install necessary dev GLEW, GLFW, and GLM libraries before I could get g++ 
 sudo apt-get install libglew-dev
 sudo apt-get install libglfw3-dev
 sudo apt-get install libglm-dev
+sudo apt-get install libassimp-dev
 ```
 
 When linking, you can use the gcc `-l[LIBRARY_NAME]` to link the libraries. For example, `-lGL` for OpenGL.

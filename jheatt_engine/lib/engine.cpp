@@ -6,7 +6,8 @@ Engine* Engine::singletonInstance = NULL;
 void Engine::LoadModel(std::string path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-    fprintf(stderr, "File root node: %s", scene->mRootNode->mName.C_Str());
+    fprintf(stderr, "Scene meshes: %u\n", scene->mNumMeshes);
+    fprintf(stderr, "File root node: %s\n", scene->mRootNode->mName.C_Str());
 }
 
 Engine* Engine::GetOrCreateInstance() {

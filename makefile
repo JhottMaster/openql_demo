@@ -2,7 +2,7 @@
 CC=g++ # Uses clang in OSX
 LNK_FLAGS=-lGLEW -lglfw -lSOIL
 OSX_LNK_FLAGS=-framework OpenGL -framework CoreFoundation -std=c++11
-NIX_LNK_FLAGS=-Wall -lGL
+NIX_LNK_FLAGS=-Wall -lGL -lassimp
 LIB_HEADER_DIR=./additional_includes/
 
 # Build configuration:
