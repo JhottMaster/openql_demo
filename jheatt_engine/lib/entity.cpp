@@ -13,7 +13,7 @@ void Entity::Render() {
   model = glm::rotate(model, glm::radians(Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
   model = glm::rotate(model, glm::radians(Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-  MeshShader()->SetFloatMatrixVariable("model", model);        
+  MeshShader()->SetFloatMatrixVariable("model", model);    
   _mesh->DrawMesh();
 }
 

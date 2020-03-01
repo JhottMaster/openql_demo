@@ -14,7 +14,6 @@ private:
 public:
     GLuint shaderProgram;
     bool compilationFailed;
-    bool configuredAttributes;
     char lastErrorCallStack[512];
 
     static const char* DEFAULT_SHADER_PATH;
@@ -24,7 +23,6 @@ public:
     Shader(const char * vertexShaderFilePath, const char * fragmentShaderFilePath);
 
     void UseShader();
-    void ConfigureAttributes();
 
     void SetBoolVariable(const std::string &name, bool value) const;
     void SetIntVariable(const std::string &name, int value) const;

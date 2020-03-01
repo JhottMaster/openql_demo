@@ -5,7 +5,6 @@ const char* Shader::VERTEX_SHADER_EXTENSION = ".vert";
 const char* Shader::FRAGMENT_SHADER_EXTENSION = ".frag";
 
 Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFileName) {
-	configuredAttributes = false;
 	compilationFailed = false;
 
 	GLuint vertexShader = Shader::LoadShader(GL_VERTEX_SHADER, vertexShaderFileName);
@@ -36,31 +35,6 @@ Shader::Shader(const char * vertexShaderFileName, const char * fragmentShaderFil
 	// Delete the shaders as they're linked into our program now and no longer necessery
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-}
-
-void Shader::ConfigureAttributes() {
-	if (compilationFailed) {
-		printf("WARNING: Attempting to configure attributes after failed shader compilation");
-	}
-
-	// Get the position of the "postition" argument in vertex shader:
-	GLint positionAttribute = glGetAttribLocation(shaderProgram, "position");
-	// Describe the input type for positionAttribute (vertices array)
-	glVertexAttribPointer(positionAttribute, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
-	glEnableVertexAttribArray(positionAttribute);
-
-	// Get the position of the "normal" argument in vertex shader:
-	GLint normalAttribute = glGetAttribLocation(shaderProgram, "normal");
-	// Describe the input type for normalAttribute (normal position in vertices array)
-	glVertexAttribPointer(normalAttribute, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(normalAttribute);
-
-	// Get the position of the "texcoord" argument in vertex shader:
-	GLint textureAttribute = glGetAttribLocation(shaderProgram, "texcoord");
-	glVertexAttribPointer(textureAttribute, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(textureAttribute);
-
-	configuredAttributes = true;
 }
 
 void Shader::UseShader() {

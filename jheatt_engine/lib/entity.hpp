@@ -8,6 +8,16 @@
 class Shader;
 class Mesh;
 
+enum TextureType {
+    DIFFUSE,
+    SPECULAR
+};
+
+struct Texture {
+    unsigned int id;
+    TextureType type;
+};
+
 enum EntityLightType {
     NOT_A_LIGHT,
     OMNI_LIGHT,
@@ -23,6 +33,7 @@ private:
     void CalculateLightConstants(float distance);
 
 public:
+    std::vector<Texture> Textures;
     glm::vec2 LightConstants = glm::vec2(0.7, 1.8);
     glm::vec3 LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 LightDirection = glm::vec3(0.0f, -1.0f, 0.0f);

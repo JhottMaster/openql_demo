@@ -4,6 +4,12 @@
 #include "engine.hpp"
 class Shader;
 
+struct Vertex {
+    glm::vec3 Position;
+    glm::vec3 Normal;
+    glm::vec2 TextureCoordinates;
+};
+
 class Mesh {
 private:
     bool initialized = false;
@@ -12,20 +18,21 @@ private:
     GLuint vertex_buffer_object_handle;
     GLuint element_buffer_object_hanle;
 
-    int number_of_vertices = 0;
-    int number_of_indexes = 0;
-    float* vertices = nullptr;
-    GLuint* vertex_triangle_indeces = nullptr; 
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> triangle_indices;
+
+    //int number_of_vertices = 0;
+    //int number_of_indexes = 0;
+    //float* vertices = nullptr;
+    //GLuint* vertex_triangle_indeces = nullptr; 
+
+    void configureAttributes();
+    int sizeOfVertices();
+    int sizeOfElementIndexes();
 
 public:
-    int vertexCount();
-    int indexCount();
-    float* vertexList();
-    GLuint* indexList();
     Shader* MeshShader;
-    
-    int sizeOfVertices();
-    int sizeOfIndex();
+        
     static Mesh* Plane(Shader* shader, float length = 1.0f, float width = 1.0f);
     static Mesh* Cube(Shader* shader, float size = 1.0f);
 
