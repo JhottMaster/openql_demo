@@ -8,6 +8,9 @@ Following Tutorials for OpenGL in C++
 - https://open.gl/introduction
 - https://learnopengl.com/Introduction
 
+Other Resources:
+https://thebookofshaders.com/
+
 ## Ubuntu Setup
 
 Must install necessary dev GLEW, GLFW, and GLM libraries before I could get g++ to link them:
