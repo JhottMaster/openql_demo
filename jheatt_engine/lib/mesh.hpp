@@ -21,11 +21,6 @@ private:
     std::vector<Vertex> vertices;
     std::vector<GLuint> triangle_indices;
 
-    //int number_of_vertices = 0;
-    //int number_of_indexes = 0;
-    //float* vertices = nullptr;
-    //GLuint* vertex_triangle_indeces = nullptr; 
-
     void configureAttributes();
     int sizeOfVertices();
     int sizeOfElementIndexes();

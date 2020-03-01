@@ -1,30 +1,35 @@
 #include "entity.hpp"
 
-Entity::Entity(Mesh* mesh, EntityLightType light_type) {
-  _mesh = mesh;
+Entity::Entity(EntityLightType light_type) {
   _light_type = light_type;
   if (light_type == OMNI_LIGHT || light_type == SPOT_LIGHT) CalculateLightConstants(LightRadius);
 }
 
-void Entity::Render() {
+void Entity::Render(Camera* camera) {
   glm::mat4 model = glm::mat4(1.0f);
   model = glm::translate(model, Position);
   model = glm::rotate(model, glm::radians(Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
   model = glm::rotate(model, glm::radians(Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
   model = glm::rotate(model, glm::radians(Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
-  MeshShader()->SetFloatMatrixVariable("model", model);    
-  _mesh->DrawMesh();
+  Shader* _currentMeshShader  = nullptr;
+  for (Mesh* meshPointer: Meshes) {
+    if (_currentMeshShader  == nullptr) {
+      _currentMeshShader = meshPointer->MeshShader;
+      bool entityIsLight = (_light_type != NOT_A_LIGHT);
+
+      if (entityIsLight) _currentMeshShader->SetVec3Variable("lightColor", LightColor);    
+      camera->UpdateShaderCameraScene(_currentMeshShader, entityIsLight);
+      _currentMeshShader->SetFloatMatrixVariable("model", model);
+    }
+    meshPointer->DrawMesh();
+  }
 }
 
 void Entity::SetLightType(EntityLightType type) {
   ValidateLight("SetLightType()");
   _light_type = type;
   if (type == OMNI_LIGHT || type == SPOT_LIGHT) CalculateLightConstants(LightRadius);
-}
-
-inline Shader* Entity::MeshShader() {
-  return _mesh->MeshShader;
 }
 
 void Entity::CalculateLightConstants(float distance) {
@@ -61,4 +66,7 @@ inline bool Entity::IsALight() {
 }
 
 Entity::~Entity() {
+  for (Mesh* meshPointer: Meshes) delete meshPointer;
+  Meshes.clear();
+  Meshes.shrink_to_fit();
 }

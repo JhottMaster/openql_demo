@@ -127,75 +127,68 @@ void Camera::CalculateShowcaseCameraMovement(glm::vec3 center) {
   _view_matrix = glm::lookAt(Position, center, cameraUp);  
 }
 
+void Camera::UpdateShaderCameraScene(Shader *shader, bool ViewProjectionOnly) {
+  shader->UseShader(); 
+
+  shader->SetFloatMatrixVariable("view", _view_matrix);
+  shader->SetFloatMatrixVariable("projection", _projection_matrix);
+  if (ViewProjectionOnly) return;
+
+  shader->SetVec3Variable("camera_view_position", Position);
+  shader->SetVec3Variable("ambient_light_color", AmbientLight);
+  shader->SetFloatVariable("material.shininess", 0.5f);
+
+  shader->SetIntVariable("number_of_dynamic_lights", _engine->Lights.size());
+  int currentIndex = 0;
+  for (Entity* currentLight: _engine->Lights) {
+    char varNameBuffer[64];
+
+    bool is_spot_light = (currentLight->LightType() == SPOT_LIGHT);
+    bool is_directional_light = (currentLight->LightType() == DIRECTIONAL_LIGHT);
+
+    if (is_spot_light) {
+      snprintf(varNameBuffer, 64, "dynamic_lights[%i].is_spotlight", currentIndex);
+      shader->SetBoolVariable(varNameBuffer, is_spot_light);
+      snprintf(varNameBuffer, 64, "dynamic_lights[%i].spotlight_cutoff", currentIndex);
+      shader->SetFloatVariable(varNameBuffer, glm::cos(glm::radians(currentLight->SpotlightSpreadAngle)));
+      float inner_cutoff = glm::cos(glm::radians(currentLight->SpotlightSpreadAngle * currentLight->SpotlightHardness));
+      snprintf(varNameBuffer, 64, "dynamic_lights[%i].spotlight_inner_cutoff", currentIndex);
+      shader->SetFloatVariable(varNameBuffer, inner_cutoff);
+      snprintf(varNameBuffer, 64, "dynamic_lights[%i].light_direction", currentIndex);
+      shader->SetVec3Variable(varNameBuffer, currentLight->LightDirection);
+    } else if (is_directional_light) {
+      snprintf(varNameBuffer, 64, "dynamic_lights[%i].is_directional", currentIndex);
+      shader->SetBoolVariable(varNameBuffer, is_directional_light);
+      snprintf(varNameBuffer, 64, "dynamic_lights[%i].light_direction", currentIndex);
+      shader->SetVec3Variable(varNameBuffer, currentLight->LightDirection);
+    }
+    
+    snprintf(varNameBuffer, 64, "dynamic_lights[%i].constants", currentIndex);
+    shader->SetVec2Variable(varNameBuffer, currentLight->LightConstants);       
+    snprintf(varNameBuffer, 64, "dynamic_lights[%i].radius", currentIndex);
+    shader->SetFloatVariable(varNameBuffer, currentLight->LightRadius);
+    snprintf(varNameBuffer, 64, "dynamic_lights[%i].attenuation", currentIndex);
+    shader->SetFloatVariable(varNameBuffer, 10.0f);
+    snprintf(varNameBuffer, 64, "dynamic_lights[%i].color", currentIndex);
+    shader->SetVec3Variable(varNameBuffer, currentLight->LightColor);
+    snprintf(varNameBuffer, 64, "dynamic_lights[%i].position", currentIndex);
+    shader->SetVec3Variable(varNameBuffer, currentLight->Position);
+
+    currentIndex++;
+  }
+}
+
 void Camera::Draw() {
   glViewport(XPos, YPos, Width, Height);
   glClearColor(BackgroundColor.r, BackgroundColor.g, BackgroundColor.b, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  Shader* current_shader = nullptr;
   for (Entity* currentEntity: _engine->Entities) {
-    if (current_shader != currentEntity->MeshShader()) {
-      current_shader = currentEntity->MeshShader();
-      current_shader->UseShader(); 
-      current_shader->SetFloatMatrixVariable("view", _view_matrix);
-      current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
-      current_shader->SetVec3Variable("camera_view_position", Position);
-      current_shader->SetVec3Variable("ambient_light_color", AmbientLight);
-      current_shader->SetFloatVariable("material.shininess", 0.5f);
-
-      current_shader->SetIntVariable("number_of_dynamic_lights", _engine->Lights.size());
-      int currentIndex = 0;
-      for (Entity* currentLight: _engine->Lights) {
-        char varNameBuffer[64];
-
-        bool is_spot_light = (currentLight->LightType() == SPOT_LIGHT);
-        bool is_directional_light = (currentLight->LightType() == DIRECTIONAL_LIGHT);
-
-        if (is_spot_light) {
-          snprintf(varNameBuffer, 64, "dynamic_lights[%i].is_spotlight", currentIndex);
-          current_shader->SetBoolVariable(varNameBuffer, is_spot_light);
-          snprintf(varNameBuffer, 64, "dynamic_lights[%i].spotlight_cutoff", currentIndex);
-          current_shader->SetFloatVariable(varNameBuffer, glm::cos(glm::radians(currentLight->SpotlightSpreadAngle)));
-          float inner_cutoff = glm::cos(glm::radians(currentLight->SpotlightSpreadAngle * currentLight->SpotlightHardness));
-          snprintf(varNameBuffer, 64, "dynamic_lights[%i].spotlight_inner_cutoff", currentIndex);
-          current_shader->SetFloatVariable(varNameBuffer, inner_cutoff);
-          snprintf(varNameBuffer, 64, "dynamic_lights[%i].light_direction", currentIndex);
-          current_shader->SetVec3Variable(varNameBuffer, currentLight->LightDirection);
-        } else if (is_directional_light) {
-          snprintf(varNameBuffer, 64, "dynamic_lights[%i].is_directional", currentIndex);
-          current_shader->SetBoolVariable(varNameBuffer, is_directional_light);
-          snprintf(varNameBuffer, 64, "dynamic_lights[%i].light_direction", currentIndex);
-          current_shader->SetVec3Variable(varNameBuffer, currentLight->LightDirection);
-        }
-       
-        snprintf(varNameBuffer, 64, "dynamic_lights[%i].constants", currentIndex);
-        current_shader->SetVec2Variable(varNameBuffer, currentLight->LightConstants);       
-        snprintf(varNameBuffer, 64, "dynamic_lights[%i].radius", currentIndex);
-        current_shader->SetFloatVariable(varNameBuffer, currentLight->LightRadius);
-        snprintf(varNameBuffer, 64, "dynamic_lights[%i].attenuation", currentIndex);
-        current_shader->SetFloatVariable(varNameBuffer, 10.0f);
-        snprintf(varNameBuffer, 64, "dynamic_lights[%i].color", currentIndex);
-        current_shader->SetVec3Variable(varNameBuffer, currentLight->LightColor);
-        snprintf(varNameBuffer, 64, "dynamic_lights[%i].position", currentIndex);
-        current_shader->SetVec3Variable(varNameBuffer, currentLight->Position);
-
-        currentIndex++;
-      }
-    }
-
-    currentEntity->Render();
+    currentEntity->Render(this);
   }
 
-  current_shader = nullptr;
-  for (Entity* currentLightEntity: _engine->Lights) {
-    if (current_shader != currentLightEntity->MeshShader()) {
-      current_shader = currentLightEntity->MeshShader();
-      current_shader->UseShader(); 
-      current_shader->SetFloatMatrixVariable("view", _view_matrix);
-      current_shader->SetFloatMatrixVariable("projection", _projection_matrix);
-    }
-    current_shader->SetVec3Variable("lightColor", currentLightEntity->LightColor);    
-    currentLightEntity->Render();
+  for (Entity* currentLightEntity: _engine->Lights) {  
+    currentLightEntity->Render(this);
   }
 }
 

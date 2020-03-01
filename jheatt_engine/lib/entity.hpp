@@ -7,6 +7,7 @@
 
 class Shader;
 class Mesh;
+class Camera;
 
 enum TextureType {
     DIFFUSE,
@@ -27,13 +28,13 @@ enum EntityLightType {
 
 class Entity {
 private:
-    Mesh* _mesh;
     EntityLightType _light_type = NOT_A_LIGHT;
     void ValidateLight(std::string calling_method);
     void CalculateLightConstants(float distance);
 
 public:
     std::vector<Texture> Textures;
+    std::vector<Mesh*> Meshes;
     glm::vec2 LightConstants = glm::vec2(0.7, 1.8);
     glm::vec3 LightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     glm::vec3 LightDirection = glm::vec3(0.0f, -1.0f, 0.0f);
@@ -48,9 +49,8 @@ public:
     void SetLightType(EntityLightType type);
     
     EntityLightType LightType();
-    Shader* MeshShader();
-    Entity(Mesh* mesh, EntityLightType = NOT_A_LIGHT);
-    void Render();
+    Entity(EntityLightType = NOT_A_LIGHT);
+    void Render(Camera* camera);
     
     ~Entity();
 };

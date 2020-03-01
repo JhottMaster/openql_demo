@@ -57,7 +57,8 @@ int main() {
     };
 
     for(unsigned int i = 0; i < 10; i++) {
-        Entity* cubeEntity = new Entity(cubeModel);
+        Entity* cubeEntity = new Entity();
+        cubeEntity->Meshes.push_back(cubeModel);
         cubeEntity->Position = cubePositions[i];
         engine.Entities.push_back(cubeEntity);
     }
