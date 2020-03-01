@@ -2,6 +2,12 @@
 #define __ENTITY_INCLUDED__
 
 #include "engine.hpp"
+
+// Assimp for loading various types of models:
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -31,6 +37,8 @@ private:
     EntityLightType _light_type = NOT_A_LIGHT;
     void ValidateLight(std::string calling_method);
     void CalculateLightConstants(float distance);
+    bool processNode(aiNode *node, const aiScene *scene, Shader* shader);
+    Mesh* processMesh(aiMesh *mesh, const aiScene *scene, Shader* shader);
 
 public:
     std::vector<Texture> Textures;
@@ -50,6 +58,7 @@ public:
     
     EntityLightType LightType();
     Entity(EntityLightType = NOT_A_LIGHT);
+    bool LoadModel(std::string path, Shader* shader);
     void Render(Camera* camera);
     
     ~Entity();

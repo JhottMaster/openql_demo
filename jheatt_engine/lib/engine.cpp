@@ -3,13 +3,6 @@
 // Global static pointer used to ensure a single instance of engine:
 Engine* Engine::singletonInstance = NULL;  
 
-void Engine::LoadModel(std::string path) {
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-    fprintf(stderr, "Scene meshes: %u\n", scene->mNumMeshes);
-    fprintf(stderr, "File root node: %s\n", scene->mRootNode->mName.C_Str());
-}
-
 Engine* Engine::GetOrCreateInstance() {
   if (!singletonInstance) singletonInstance = new Engine();
 	return singletonInstance;

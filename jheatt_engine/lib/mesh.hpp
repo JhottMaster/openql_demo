@@ -16,10 +16,7 @@ private:
     
     GLuint vertex_array_object_handle;
     GLuint vertex_buffer_object_handle;
-    GLuint element_buffer_object_hanle;
-
-    std::vector<Vertex> vertices;
-    std::vector<GLuint> triangle_indices;
+    GLuint element_buffer_object_hanle;    
 
     void configureAttributes();
     int sizeOfVertices();
@@ -27,6 +24,9 @@ private:
 
 public:
     Shader* MeshShader;
+
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> triangle_indices;
         
     static Mesh* Plane(Shader* shader, float length = 1.0f, float width = 1.0f);
     static Mesh* Cube(Shader* shader, float size = 1.0f);

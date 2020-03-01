@@ -11,8 +11,6 @@ void SetTitle(WindowManager* window, Camera* cam);
 int main() {
     Engine& engine = *Engine::GetOrCreateInstance();
 
-    engine.LoadModel("resources/meshes/nanosuit/nanosuit.obj");
-
     WindowManager* window = engine.CreateWindow();
 
     Camera* camera = window->CreateCamera();
@@ -62,6 +60,10 @@ int main() {
         cubeEntity->Position = cubePositions[i];
         engine.Entities.push_back(cubeEntity);
     }
+
+    Entity* model = new Entity();
+    model->LoadModel("resources/meshes/nanosuit/nanosuit.obj", &simpleShader);
+    engine.Entities.push_back(model);
 
     Entity* OmniLight = engine.AddLight(&lightSourceShader);
     OmniLight->LightColor = glm::vec3(1.0f, 0.0f, 0.0f);

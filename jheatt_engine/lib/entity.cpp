@@ -5,6 +5,64 @@ Entity::Entity(EntityLightType light_type) {
   if (light_type == OMNI_LIGHT || light_type == SPOT_LIGHT) CalculateLightConstants(LightRadius);
 }
 
+bool Entity::LoadModel(std::string path, Shader* shader) {
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    fprintf(stderr, "Loading model: %s...\n", path.c_str());
+    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
+    {
+        fprintf(stderr,"ERROR::ASSIMP::%s\n", importer.GetErrorString());
+        return false;
+    }
+    //directory = path.substr(0, path.find_last_of('/'));
+
+    return processNode(scene->mRootNode, scene, shader);
+}
+
+bool Entity::processNode(aiNode *node, const aiScene *scene, Shader* shader) {
+  // process all the node's meshes (if any)
+  for(unsigned int i = 0; i < node->mNumMeshes; i++) {
+    aiMesh *mesh = scene->mMeshes[node->mMeshes[i]]; 
+    Meshes.push_back(processMesh(mesh, scene, shader));			
+  }
+  
+  // Do the same for each of its children
+  for(unsigned int i = 0; i < node->mNumChildren; i++) {
+      processNode(node->mChildren[i], scene, shader);
+  }
+
+  return true;
+}
+
+Mesh* Entity::processMesh(aiMesh *mesh, const aiScene *scene, Shader* shader)
+{
+    Mesh* new_mesh = new Mesh(shader);
+
+    for(unsigned int i = 0; i < mesh->mNumVertices; i++)
+    {
+        Vertex meshVertex;
+        meshVertex.Position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+        meshVertex.Normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+
+        // Does the mesh contain texture coordinates?
+        if(mesh->mTextureCoords[0])
+          meshVertex.TextureCoordinates = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+        else
+          meshVertex.TextureCoordinates = glm::vec2(0.0f, 0.0f);  
+        
+        new_mesh->vertices.push_back(meshVertex);
+    }
+
+    for(unsigned int i = 0; i < mesh->mNumFaces; i++)
+    {
+        aiFace face = mesh->mFaces[i];
+        for(unsigned int j = 0; j < face.mNumIndices; j++)
+          new_mesh->triangle_indices.push_back(face.mIndices[j]);
+    }  
+
+    return new_mesh;
+}  
+
 void Entity::Render(Camera* camera) {
   glm::mat4 model = glm::mat4(1.0f);
   model = glm::translate(model, Position);
@@ -66,7 +124,7 @@ inline bool Entity::IsALight() {
 }
 
 Entity::~Entity() {
-  for (Mesh* meshPointer: Meshes) delete meshPointer;
+  // for (Mesh* meshPointer: Meshes) delete meshPointer;
   Meshes.clear();
   Meshes.shrink_to_fit();
 }
