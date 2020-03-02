@@ -7,8 +7,8 @@ in vec3 FragPos;
 out vec4 outColor;
 
 struct Material {
-    sampler2D diffuse_texture;
-    sampler2D specular_texture;
+    sampler2D diffuse_texture_0;
+    sampler2D specular_texture_0;
     float shininess;
 };
 uniform Material material;
@@ -40,7 +40,7 @@ vec3 CalculateLightMultiplier(Light light, vec3 normal, vec3 fragment_position, 
 void main()
 {
     vec3 normal = normalize(Normal);
-    vec3 diffuse_sample = vec3(texture(material.diffuse_texture, Texcoord));
+    vec3 diffuse_sample = vec3(texture(material.diffuse_texture_0, Texcoord));
     vec3 view_direction = normalize(camera_view_position - FragPos);
 
     // Ambient lighting: 
@@ -63,7 +63,7 @@ vec3 CalculateLightMultiplier(Light light, vec3 normal, vec3 fragment_position, 
 
     // Specular:
     float spec = pow(max(dot(view_direction, reflect(-lightDir, normal)), 0.0), 32);
-    vec3 specular = material.shininess * spec * vec3(texture(material.specular_texture, Texcoord));
+    vec3 specular = material.shininess * spec * vec3(texture(material.specular_texture_0, Texcoord));
     
     // Attenuation impact:
     float distance = length(light.position - fragment_position);

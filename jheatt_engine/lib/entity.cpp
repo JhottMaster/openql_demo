@@ -58,10 +58,29 @@ Mesh* Entity::processMesh(aiMesh *mesh, const aiScene *scene, Shader* shader)
         aiFace face = mesh->mFaces[i];
         for(unsigned int j = 0; j < face.mNumIndices; j++)
           new_mesh->triangle_indices.push_back(face.mIndices[j]);
-    }  
+    } 
+
+    if(mesh->mMaterialIndex >= 0)
+    {
+        aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+        loadMaterialTextures(material, aiTextureType_DIFFUSE, DIFFUSE);
+        loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR);
+    }   
 
     return new_mesh;
 }  
+
+void Entity::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureUsage texture_usage)
+{
+    for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
+    {
+        aiString path;
+        mat->GetTexture(type, i, &path);
+        fprintf(stderr, "Loading texture in slot %u: %s...\n", i, path.C_Str());
+        // TODO: Looks like there's a bug, if this texture loads the box textures do not?
+        Textures.push_back(new TextureObject(path.C_Str(), i, texture_usage));
+    }
+} 
 
 void Entity::Render(Camera* camera) {
   glm::mat4 model = glm::mat4(1.0f);

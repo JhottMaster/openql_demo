@@ -2,6 +2,7 @@
 #define __ENTITY_INCLUDED__
 
 #include "engine.hpp"
+#include "texture_object.hpp"
 
 // Assimp for loading various types of models:
 #include <assimp/Importer.hpp>
@@ -14,16 +15,7 @@
 class Shader;
 class Mesh;
 class Camera;
-
-enum TextureType {
-    DIFFUSE,
-    SPECULAR
-};
-
-struct Texture {
-    unsigned int id;
-    TextureType type;
-};
+class TextureObject;
 
 enum EntityLightType {
     NOT_A_LIGHT,
@@ -40,8 +32,10 @@ private:
     bool processNode(aiNode *node, const aiScene *scene, Shader* shader);
     Mesh* processMesh(aiMesh *mesh, const aiScene *scene, Shader* shader);
 
+    void loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureUsage typeName);
+
 public:
-    std::vector<Texture> Textures;
+    std::vector<TextureObject*> Textures;
     std::vector<Mesh*> Meshes;
     glm::vec2 LightConstants = glm::vec2(0.7, 1.8);
     glm::vec3 LightColor = glm::vec3(1.0f, 1.0f, 1.0f);

@@ -1,6 +1,5 @@
-#include "lib/engine.hpp"
-#include "lib/texture_object.hpp"
 #include <iomanip>
+#include "lib/engine.hpp"
 
 using namespace glm;
 
@@ -34,11 +33,10 @@ int main() {
     }
 
     Mesh* cubeModel = Mesh::Cube(&simpleShader);
-    TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg");
-    TextureObject woodSpecular = TextureObject("resources/images/dark_wooden_crate_specular.jpg", 1);
-    simpleShader.UseShader(); // Activate shader before setting uniforms
-    simpleShader.SetIntVariable("material.diffuse_texture", 0);
-    simpleShader.SetIntVariable("material.specular_texture", 1);
+    TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg", 0);
+    TextureObject woodSpecular = TextureObject("resources/images/dark_wooden_crate_specular.jpg", 1, SPECULAR);
+    cubeModel->textures.push_back( { &woodTexture });
+    cubeModel->textures.push_back( { &woodSpecular });
 
     // Build a bunch of cubes at various positions:
     glm::vec3 cubePositions[] = {

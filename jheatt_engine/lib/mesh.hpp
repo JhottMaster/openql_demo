@@ -3,11 +3,16 @@
 
 #include "engine.hpp"
 class Shader;
+class TextureObject;
 
 struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TextureCoordinates;
+};
+
+struct MeshTexture {
+    TextureObject* textureHandle;
 };
 
 class Mesh {
@@ -24,7 +29,9 @@ private:
 
 public:
     Shader* MeshShader;
+    bool RenderWithIndices = true;
 
+    std::vector<MeshTexture> textures;
     std::vector<Vertex> vertices;
     std::vector<GLuint> triangle_indices;
         

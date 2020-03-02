@@ -16,10 +16,16 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+enum TextureUsage {
+    DIFFUSE,
+    SPECULAR
+};
+
 // Ordered Engine Includes
 // First, include most basic building blocks:
 #include "shader_util.hpp"
 #include "shader.hpp"
+#include "texture_object.hpp"
 #include "mesh.hpp"
 
 // Now build out the entities that use them:

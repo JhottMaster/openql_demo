@@ -64,9 +64,16 @@ void Mesh::configureAttributes() {
 
 void Mesh::DrawMesh() {
   if (!initialized) Initialize();
+    
+  for(unsigned int i = 0; i < textures.size(); i++) {
+    textures[i].textureHandle->UseTexture(MeshShader);
+  }
+
   glBindVertexArray(vertex_array_object_handle);
-  //glDrawElements(GL_TRIANGLES, triangle_indices.size() , GL_UNSIGNED_INT, 0);
-  glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+  if (RenderWithIndices)
+    glDrawElements(GL_TRIANGLES, triangle_indices.size() , GL_UNSIGNED_INT, 0);
+  else
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
   glBindVertexArray(0);
 }
 
@@ -155,6 +162,7 @@ Mesh* Mesh::Cube(Shader* shader, float size) {
     msh->triangle_indices.push_back(temp_idx[x]);
   }
 
+  msh->RenderWithIndices = false;
   return msh;
 }
 
