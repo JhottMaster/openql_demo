@@ -143,8 +143,8 @@ void Camera::UpdateShaderCameraScene(Shader *shader, bool ViewProjectionOnly) {
   for (Entity* currentLight: _engine->Lights) {
     char varNameBuffer[64];
 
-    bool is_spot_light = (currentLight->LightType() == SPOT_LIGHT);
-    bool is_directional_light = (currentLight->LightType() == DIRECTIONAL_LIGHT);
+    bool is_spot_light = (currentLight->LightType() == EntityLightType::SPOT_LIGHT);
+    bool is_directional_light = (currentLight->LightType() == EntityLightType::DIRECTIONAL_LIGHT);
 
     if (is_spot_light) {
       snprintf(varNameBuffer, 64, "dynamic_lights[%i].is_spotlight", currentIndex);

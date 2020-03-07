@@ -17,7 +17,7 @@ class Mesh;
 class Camera;
 class TextureObject;
 
-enum EntityLightType {
+enum class EntityLightType {
     NOT_A_LIGHT,
     OMNI_LIGHT,
     DIRECTIONAL_LIGHT,
@@ -26,13 +26,14 @@ enum EntityLightType {
 
 class Entity {
 private:
-    EntityLightType _light_type = NOT_A_LIGHT;
+    EntityLightType _light_type = EntityLightType::NOT_A_LIGHT;
+    std::string _model_load_path;
     void ValidateLight(std::string calling_method);
     void CalculateLightConstants(float distance);
     bool processNode(aiNode *node, const aiScene *scene, Shader* shader);
     Mesh* processMesh(aiMesh *mesh, const aiScene *scene, Shader* shader);
 
-    void loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureUsage typeName);
+    void loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureUsage typeName, Mesh* mesh);
 
 public:
     std::vector<TextureObject*> Textures;
@@ -51,7 +52,7 @@ public:
     void SetLightType(EntityLightType type);
     
     EntityLightType LightType();
-    Entity(EntityLightType = NOT_A_LIGHT);
+    Entity(EntityLightType = EntityLightType::NOT_A_LIGHT);
     bool LoadModel(std::string path, Shader* shader);
     void Render(Camera* camera);
     

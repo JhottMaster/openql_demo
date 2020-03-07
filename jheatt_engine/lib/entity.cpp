@@ -2,7 +2,8 @@
 
 Entity::Entity(EntityLightType light_type) {
   _light_type = light_type;
-  if (light_type == OMNI_LIGHT || light_type == SPOT_LIGHT) CalculateLightConstants(LightRadius);
+  if (light_type == EntityLightType::OMNI_LIGHT || light_type == EntityLightType::SPOT_LIGHT) 
+      CalculateLightConstants(LightRadius);
 }
 
 bool Entity::LoadModel(std::string path, Shader* shader) {
@@ -14,7 +15,7 @@ bool Entity::LoadModel(std::string path, Shader* shader) {
         fprintf(stderr,"ERROR::ASSIMP::%s\n", importer.GetErrorString());
         return false;
     }
-    //directory = path.substr(0, path.find_last_of('/'));
+    _model_load_path = path.substr(0, path.find_last_of('/') + 1);
 
     return processNode(scene->mRootNode, scene, shader);
 }
@@ -63,22 +64,23 @@ Mesh* Entity::processMesh(aiMesh *mesh, const aiScene *scene, Shader* shader)
     if(mesh->mMaterialIndex >= 0)
     {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-        loadMaterialTextures(material, aiTextureType_DIFFUSE, DIFFUSE);
-        loadMaterialTextures(material, aiTextureType_SPECULAR, SPECULAR);
+        loadMaterialTextures(material, aiTextureType_DIFFUSE, TextureUsage::DIFFUSE, new_mesh);
+        loadMaterialTextures(material, aiTextureType_SPECULAR, TextureUsage::SPECULAR, new_mesh);
     }   
 
     return new_mesh;
 }  
 
-void Entity::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureUsage texture_usage)
+void Entity::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureUsage texture_usage, Mesh* mesh)
 {
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString path;
         mat->GetTexture(type, i, &path);
-        fprintf(stderr, "Loading texture in slot %u: %s...\n", i, path.C_Str());
-        // TODO: Looks like there's a bug, if this texture loads the box textures do not?
-        Textures.push_back(new TextureObject(path.C_Str(), i, texture_usage));
+        std::string full_path = _model_load_path + std::string(path.data);
+
+        fprintf(stderr, "Loading texture in slot %u: %s...\n", i, full_path.c_str());        
+        mesh->textures.push_back({ new TextureObject(full_path.c_str(), i, texture_usage) });
     }
 } 
 
@@ -93,7 +95,7 @@ void Entity::Render(Camera* camera) {
   for (Mesh* meshPointer: Meshes) {
     if (_currentMeshShader  == nullptr) {
       _currentMeshShader = meshPointer->MeshShader;
-      bool entityIsLight = (_light_type != NOT_A_LIGHT);
+      bool entityIsLight = (_light_type != EntityLightType::NOT_A_LIGHT);
 
       if (entityIsLight) _currentMeshShader->SetVec3Variable("lightColor", LightColor);    
       camera->UpdateShaderCameraScene(_currentMeshShader, entityIsLight);
@@ -106,7 +108,8 @@ void Entity::Render(Camera* camera) {
 void Entity::SetLightType(EntityLightType type) {
   ValidateLight("SetLightType()");
   _light_type = type;
-  if (type == OMNI_LIGHT || type == SPOT_LIGHT) CalculateLightConstants(LightRadius);
+  if (type == EntityLightType::OMNI_LIGHT || type == EntityLightType::SPOT_LIGHT)
+      CalculateLightConstants(LightRadius);
 }
 
 void Entity::CalculateLightConstants(float distance) {
@@ -139,7 +142,7 @@ EntityLightType Entity::LightType() {
 }
 
 inline bool Entity::IsALight() {
-  return (_light_type != NOT_A_LIGHT);
+  return (_light_type != EntityLightType::NOT_A_LIGHT);
 }
 
 Entity::~Entity() {

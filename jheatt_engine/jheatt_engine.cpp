@@ -34,7 +34,7 @@ int main() {
 
     Mesh* cubeModel = Mesh::Cube(&simpleShader);
     TextureObject woodTexture = TextureObject("resources/images/dark_wooden_crate.jpg", 0);
-    TextureObject woodSpecular = TextureObject("resources/images/dark_wooden_crate_specular.jpg", 1, SPECULAR);
+    TextureObject woodSpecular = TextureObject("resources/images/dark_wooden_crate_specular.jpg", 1, TextureUsage::SPECULAR);
     cubeModel->textures.push_back( { &woodTexture });
     cubeModel->textures.push_back( { &woodSpecular });
 
@@ -72,7 +72,7 @@ int main() {
 
     Entity* DirectionalLight = engine.AddLight(&lightSourceShader);
     DirectionalLight->Position = glm::vec3(0.0f, 0.0f, 3.0f);
-    DirectionalLight->SetLightType(SPOT_LIGHT);
+    DirectionalLight->SetLightType(EntityLightType::SPOT_LIGHT);
     DirectionalLight->LightDirection = glm::vec3(0.0f, 0.0f, -1.0f);
 
     // Enable depth testing so we write faces correctly:    

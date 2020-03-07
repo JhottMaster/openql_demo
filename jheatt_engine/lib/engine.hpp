@@ -16,7 +16,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-enum TextureUsage {
+enum class TextureUsage {
     DIFFUSE,
     SPECULAR
 };

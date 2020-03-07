@@ -16,11 +16,11 @@ public:
     TextureUsage Usage;
     const char* FilePath;
 
-    GLenum textureType;
-    GLuint handle;
-    int Width, Height;
+    GLenum textureType = GL_TEXTURE_2D;
+    GLuint handle = 0;
+    int Width = 0, Height = 0;
     
-    TextureObject(const char * textureFilePath, int slot = 0, TextureUsage usage = DIFFUSE, GLenum format = GL_RGB, GLenum type = GL_TEXTURE_2D);
+    TextureObject(const char * textureFilePath, int slot = 0, TextureUsage usage = TextureUsage::DIFFUSE, GLenum format = GL_RGB, GLenum type = GL_TEXTURE_2D);
     void UseTexture(Shader* shader);
 
     ~TextureObject();

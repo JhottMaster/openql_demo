@@ -9,21 +9,19 @@ TextureObject::TextureObject(const char * textureFilePath, int slot, TextureUsag
       printf("SOIL Texture Error; Could not load '%s':\n'%s'\n\n", textureFilePath, SOIL_last_result());
       return;
     }
-
-    // Create device object able to store texture in graphics card memory:
-		glActiveTexture(GL_TEXTURE0 + unitSlot);
-    glGenTextures(unitSlot, &handle);
-    glBindTexture(_type, handle);
-
-    glTexImage2D(type, 0, GL_RGB, Width, Height, 0, format, GL_UNSIGNED_BYTE, image);
+        
+    glGenTextures(1, &handle); // Create device object able to store texture in graphics card memory
+    glBindTexture(_type, handle); // Bind to it so we can perform operations
+    glTexImage2D(type, 0, GL_RGB, Width, Height, 0, format, GL_UNSIGNED_BYTE, image); // Create texture
     
-    SOIL_free_image_data(image);
+	glGenerateMipmap(type);
 
-		glGenerateMipmap(type);
-    glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    SOIL_free_image_data(image);
 
     _type = type;
     _format = format;
@@ -31,13 +29,12 @@ TextureObject::TextureObject(const char * textureFilePath, int slot, TextureUsag
     FilePath = textureFilePath;
 
     glBindTexture(type, 0);
-
 }
 
 void TextureObject::UseTexture(Shader* shader) {
   glActiveTexture(GL_TEXTURE0 + unitSlot);
   
-  if (Usage == SPECULAR) {
+  if (Usage == TextureUsage::SPECULAR) {
     shader->SetIntVariable("material.specular_texture_0", unitSlot);
   } else {
     shader->SetIntVariable("material.diffuse_texture_0", unitSlot);
