@@ -61,6 +61,8 @@ int main() {
 
     Entity* model = new Entity();
     model->LoadModel("resources/meshes/nanosuit/nanosuit.obj", &simpleShader);
+    model->Scale = glm::vec3(0.2f, 0.2f, 0.2f);
+    model->Position = glm::vec3(0.0f, -0.5f, 1.0f);
     engine.Entities.push_back(model);
 
     Entity* OmniLight = engine.AddLight(&lightSourceShader);

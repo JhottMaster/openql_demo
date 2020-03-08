@@ -77,9 +77,7 @@ void Entity::loadMaterialTextures(aiMaterial *mat, aiTextureType type, TextureUs
     {
         aiString path;
         mat->GetTexture(type, i, &path);
-        std::string full_path = _model_load_path + std::string(path.data);
-
-        fprintf(stderr, "Loading texture in slot %u: %s...\n", i, full_path.c_str());        
+        std::string full_path = _model_load_path + std::string(path.C_Str());
         mesh->textures.push_back({ new TextureObject(full_path.c_str(), i, texture_usage) });
     }
 } 
@@ -90,6 +88,7 @@ void Entity::Render(Camera* camera) {
   model = glm::rotate(model, glm::radians(Rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
   model = glm::rotate(model, glm::radians(Rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
   model = glm::rotate(model, glm::radians(Rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+  model = glm::scale(model, Scale);
 
   Shader* _currentMeshShader  = nullptr;
   for (Mesh* meshPointer: Meshes) {

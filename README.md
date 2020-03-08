@@ -31,6 +31,8 @@ sudo make install
 
 This will install SOIL in Unix to allow linking. You can't use the library file that comes in `/lib` because it is 32-bit (unless you have a 32-bit machine)
 
+**Note: Version 5 of libassimp-dev is needed to load textures.** If working on an older version of Linux, (like I was), you can forcefull install 5 by following steps here: https://stackoverflow.com/a/60584315/100875
+
 ### Building
 
 Build & run with `make unix`
