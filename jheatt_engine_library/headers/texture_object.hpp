@@ -2,7 +2,9 @@
 #define __TEXTURE_OBJECT_INCLUDED__
 
 #include "engine.hpp"
-#include "SOIL/SOIL.h"
+#ifdef JHEATT_ENGINE_EXPORTS  
+    #include "SOIL/SOIL.h"
+#endif
 
 class Shader;
 

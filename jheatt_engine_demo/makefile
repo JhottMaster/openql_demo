@@ -1,20 +1,20 @@
 # Cross-platform compilation:
 CC=g++ # Uses clang in OSX
-LNK_FLAGS=-lGLEW -lglfw -lSOIL -lassimp
+LNK_FLAGS=-lGLEW -lglfw -lassimp -ljheattengine
 OSX_LNK_FLAGS=-framework OpenGL -framework CoreFoundation -std=c++11
 NIX_LNK_FLAGS=-Wall -lGL
-LIB_HEADER_DIR=./additional_includes/
+LIB_HEADER_DIR=-I ./../jheatt_engine_library/headers/
 
 # Build configuration:
-EXEC_NAME=jheatt_engine
-SRC_DIR=./jheatt_engine
-OUT_DIR=./build
+EXEC_NAME=jheatt_demo
+SRC_DIR=./jheatt_engine_demo/
+OUT_DIR=./../build
 
 unix: build_unix
 	@echo "Creating output dirs..."
 	rm -f -r $(OUT_DIR)/shaders
-	cp -u -r $(SRC_DIR)/shaders $(OUT_DIR)/shaders
-	cp -u -r -a $(SRC_DIR)/resources $(OUT_DIR)/resources
+	cp -u -r ./shaders $(OUT_DIR)
+	cp -u -r -a ./resources $(OUT_DIR)
 	@echo "Finished! Running:"
 	cd $(OUT_DIR)/; ./$(EXEC_NAME)
 
@@ -31,12 +31,12 @@ osx: build_osx
 build_osx:
 	@mkdir -p $(OUT_DIR)/
 	@echo "Building..."
-	$(CC) $(shell find '$(SRC_DIR)' -name '*.*pp') $(OSX_LNK_FLAGS) $(LNK_FLAGS) -I$(LIB_HEADER_DIR)
+	$(CC) $(shell find '$(SRC_DIR)' -name '*.*pp') $(OSX_LNK_FLAGS) $(LNK_FLAGS) $(LIB_HEADER_DIR)
 
 build_unix:
 	@mkdir -p $(OUT_DIR)/
 	@echo "Building..."
-	$(CC) -o $(OUT_DIR)/$(EXEC_NAME) $(shell find -regex '$(SRC_DIR)*.*pp' -type f) $(NIX_LNK_FLAGS) $(LNK_FLAGS) -I$(LIB_HEADER_DIR)
+	$(CC) -o $(OUT_DIR)/$(EXEC_NAME) $(shell find -regex '$(SRC_DIR)*.*pp' -type f) $(NIX_LNK_FLAGS) $(LNK_FLAGS) $(LIB_HEADER_DIR)
 
 clean:
 	rm -r $(OUT_DIR)/*

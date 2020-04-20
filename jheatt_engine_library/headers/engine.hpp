@@ -16,10 +16,18 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#ifdef JHEATT_ENGINE_EXPORTS
-#define JHEATT_ENGINE_API __declspec(dllexport)
+#if defined _WIN32
+  #ifdef JHEATT_ENGINE_EXPORTS  
+    #define JHEATT_ENGINE_API __declspec(dllexport)
+  #else
+    #define JHEATT_ENGINE_API __declspec(dllimport)
+  #endif
 #else
-#define JHEATT_ENGINE_API __declspec(dllimport)
+  #ifdef JHEATT_ENGINE_EXPORTS  
+    #define JHEATT_ENGINE_API __attribute__ ((dllexport))
+  #else
+    #define JHEATT_ENGINE_API __attribute__ ((dllimport))
+  #endif
 #endif
 
 enum class TextureUsage {

@@ -23,7 +23,17 @@ sudo apt-get install libassimp-dev
 
 When linking, you can use the gcc `-l[LIBRARY_NAME]` to link the libraries. For example, `-lGL` for OpenGL.
 
-Also, you'll need to download SOIL: https://www.lonesock.net/soil.html  - extract that somewhere and go to `~/project/makefile` directory, and the run:
+Also, you'll need to download SOIL: https://www.lonesock.net/soil.html  - extract that somewhere and go to `~/project/makefile` directory. Edit the `makefile`'s `CXXFLAGS` variable to do generate position-independent code:
+```
+CXXFLAGS = -O2 -s -Wall -fpic
+```
+You may need to uninstall and re-build, in which case you can do that by:
+```
+sudo make uninstall
+sudo make clean
+sudo make
+```
+Then finally run:
 ```
 mkdir obj
 sudo make install
