@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\jheatt_engine_library\additional_includes;$(IncludePath)</IncludePath>
+    <IncludePath>..\jheatt_engine_library\headers;..\jheatt_engine_library\additional_includes;$(IncludePath)</IncludePath>
     <LibraryPath>..\jheatt_engine_library\Debug;..\jheatt_engine_library\additional_libs\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
