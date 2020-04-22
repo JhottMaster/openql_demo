@@ -8,25 +8,29 @@ LIB_HEADER_DIR=-I ./../jheatt_engine_library/headers/
 # Build configuration:
 EXEC_NAME=jheatt_demo
 SRC_DIR=./jheatt_engine_demo/
-OUT_DIR=./../build
+OUT_DIR=./../build/demo
 
-unix: build_unix
+unix: create_unix_dirs	
+	@echo "Finished! Running:"
+	cd $(OUT_DIR)/; ./$(EXEC_NAME)
+
+create_unix_dirs: build_unix
 	@echo "Creating output dirs..."
 	rm -f -r $(OUT_DIR)/shaders
 	cp -u -r ./shaders $(OUT_DIR)
 	cp -u -r -a ./resources $(OUT_DIR)
+
+osx: create_osx_dirs
 	@echo "Finished! Running:"
 	cd $(OUT_DIR)/; ./$(EXEC_NAME)
 
-osx: build_osx
+create_osx_dirs: build_osx
 	@echo "Moving & renaming executable (a.out)..."
 	mv ./a.out $(OUT_DIR)/$(EXEC_NAME)
 	@echo "Creating output dirs..."
 	rm -f -r $(OUT_DIR)/shaders
 	cp -f -R ./shaders $(OUT_DIR)/shaders
 	cp -f -R ./resources $(OUT_DIR)/resources
-	@echo "Finished! Running:"
-	cd $(OUT_DIR)/; ./$(EXEC_NAME)
 
 build_osx:
 	@mkdir -p $(OUT_DIR)/
@@ -39,4 +43,4 @@ build_unix:
 	$(CC) -o $(OUT_DIR)/$(EXEC_NAME) $(shell find -regex '$(SRC_DIR)*.*pp' -type f) $(NIX_LNK_FLAGS) $(LNK_FLAGS) $(LIB_HEADER_DIR)
 
 clean:
-	rm -r $(OUT_DIR)/*
+	rm -r $(OUT_DIR)/* || true

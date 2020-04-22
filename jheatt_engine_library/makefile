@@ -55,4 +55,4 @@ uninstall:
 	rm $(LIB_INSTALL_PATH)/$(LIB_NAME)
 
 clean:
-	rm -r $(OUT_DIR)/*
+	rm -r $(OUT_DIR)/* || true

@@ -16,14 +16,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#ifdef __linux__ 
-  // Linux
-  #ifdef JHEATT_ENGINE_EXPORTS  
-    #define JHEATT_ENGINE_API __attribute__ ((dllexport))
-  #else
-    #define JHEATT_ENGINE_API __attribute__ ((dllimport))
-  #endif
-#elif _WIN32
+#ifdef _WIN32
   // Windows
   #ifdef JHEATT_ENGINE_EXPORTS  
     #define JHEATT_ENGINE_API __declspec(dllexport)
@@ -31,7 +24,7 @@
     #define JHEATT_ENGINE_API __declspec(dllimport)
   #endif
 #else
-  // OSX
+  // Linux & OSX
   #ifdef JHEATT_ENGINE_EXPORTS  
     #define JHEATT_ENGINE_API __attribute__((visibility("default")))
   #else
