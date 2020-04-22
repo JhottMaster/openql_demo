@@ -1,5 +1,9 @@
 # Open GL Tutorials/Demo
-Following Tutorials for OpenGL in C++
+Following Tutorials for OpenGL in C++ and then using that knowledge to build my own simple multi-plaform 3D engine library and demo application. 
+
+This project is split into the library (`jheatt_engine_library`) and demo program (`jheatt_engine_demo`) that demos the library's capabilities. Currently the functionality is quite limited, but does allow for loading textures, 3D models, and various types of dynamic lighting. It is currently tested running on Windows (10), Linux (Ubuntu), and OSX (Catalina).
+
+![Image of Demo Program](sample_image.jpg)
 
 ## Notes
 
