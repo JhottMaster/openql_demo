@@ -12,7 +12,7 @@
 *.gch
 
 # Compilation outputs:
-jheatt_engine_demo/build/*
+build/*
 jheatt_engine_demo/Debug/*
 jheatt_engine_demo/Release/*
 jheatt_engine_library/build/*
