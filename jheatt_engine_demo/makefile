@@ -10,6 +10,11 @@ EXEC_NAME=jheatt_demo
 SRC_DIR=./jheatt_engine_demo/
 OUT_DIR=./../build/demo
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  OUT_DIR=./../build
+endif
+
 unix: create_unix_dirs	
 	@echo "Finished! Running:"
 	cd $(OUT_DIR)/; ./$(EXEC_NAME)

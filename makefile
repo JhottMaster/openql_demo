@@ -17,7 +17,7 @@ all_osx:
 	$(MAKE) -C jheatt_engine_library/ install
 	$(MAKE) -C jheatt_engine_demo/ clean
 	$(MAKE) -C jheatt_engine_demo/ create_osx_dirs
-	@echo "Finished! Output in build/demo directory"
+	@echo "Finished! Output in build/ directory"
 
 clean:
 	rm -r ./build/* || true

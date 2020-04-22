@@ -23,3 +23,6 @@ jheatt_engine_library/Release/*
 *.ipch
 *.VC.db
 *.VC.opendb
+
+# OSX folder metadata file
+.DS_Store

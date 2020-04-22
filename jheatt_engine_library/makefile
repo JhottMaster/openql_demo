@@ -24,9 +24,6 @@ ifeq ($(UNAME_S),Darwin)
 	LIB_CONFIG_EXEC=otool -L $(LIB_INSTALL_PATH)/$(LIB_NAME)
 endif
 
-test:
-	@echo "Output file name: $(LIB_NAME)"
-
 unix:
 	@mkdir -p $(OUT_DIR)/
 	@echo "Building..."
@@ -37,9 +34,9 @@ osx:
 	@echo "Building..."
 	$(CC) -c $(shell find -E . -type f -regex "./(headers|lib|jheatt_engine).*\.*pp") -fPIC  -DJHEATT_ENGINE_EXPORTS -std=c++11  -I$(LIB_HEADER_DIR)
 	$(CC) -o $(OUT_DIR)/$(LIB_NAME) *.o $(LNK_FLAGS) $(OSX_LNK_FLAGS)
-	rm *.o
-	rm headers/*.gch
-	rm headers/*.gch.tmp
+	rm *.o || true
+	rm headers/*.gch || true
+	rm headers/*.gch.tmp || true
 
 install:
 	@echo "Make sure to run with sudo! Installing..."
@@ -53,6 +50,7 @@ install:
 uninstall:
 	@echo "Make sure to run with sudo! Uninstalling..."
 	rm $(LIB_INSTALL_PATH)/$(LIB_NAME)
+	@echo "Done!"
 
 clean:
 	rm -r $(OUT_DIR)/* || true
