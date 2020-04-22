@@ -13,8 +13,16 @@
 
 # Compilation outputs:
 build/*
+jheatt_engine_demo/Debug/*
+jheatt_engine_demo/Release/*
+jheatt_engine_library/build/*
+jheatt_engine_library/Debug/*
+jheatt_engine_library/Release/*
 
-# Visual Studio Artifacts (`.vs/jheatt_engine/v*/` folder)
+# Visual Studio Artifacts (`.vs/jheatt_engine_[demo/library]/v*/` folder)
 *.ipch
 *.VC.db
 *.VC.opendb
+
+# OSX folder metadata file
+.DS_Store

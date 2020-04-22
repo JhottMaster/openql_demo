@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jheatt_engine", "jheatt_engine.vcxproj", "{37EBEA7A-04BE-4132-8470-209B14C9221F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Debug|x64.ActiveCfg = Debug|x64
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Debug|x64.Build.0 = Debug|x64
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Debug|x86.ActiveCfg = Debug|Win32
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Debug|x86.Build.0 = Debug|Win32
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Release|x64.ActiveCfg = Release|x64
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Release|x64.Build.0 = Release|x64
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Release|x86.ActiveCfg = Release|Win32
+		{37EBEA7A-04BE-4132-8470-209B14C9221F}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2461B215-7B27-415A-998E-A36C232EF073}
+	EndGlobalSection
+EndGlobal
